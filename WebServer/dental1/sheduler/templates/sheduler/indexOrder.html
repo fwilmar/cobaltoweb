@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+    <a href="/sheduler/new/order/" style="text-align:right;float:right;padding-right:20px">New Order</a>
+
+    <br>
+    <h2 align="center">Orders administrator</h2>
+
+    <table id="tablaConcursos" style="font-family:Verdana, Geneva, sans-serif" border="1">
+        <thead style="vertical-align: center; text-align: center">
+            <th style="width:8%;font-size:13px">Case</th>
+            <th style="width:15%;font-size:13px">Doctor</th>
+            <th style="width:15%;font-size:13px">Patient</th>
+            <th style="width:8%;font-size:13px">Procedure</th>
+            <th style="width:8%;font-size:13px">Description</th>
+            <th style="width:8%;font-size:13px">Date In</th>
+            <th style="width:8%;font-size:13px">Date Out</th>
+        </thead>
+
+        <tbody>
+        {% for order in orders %}
+            <tr style="vertical-align: center; text-align: center">
+            <td>{{order.case}}</td>
+            <td>{{order.doctor}}</td>
+            <td>{{order.patient}}</td>
+            <td>{{order.procedure}}</td>
+            <td>{{order.description}}</td>
+            <td>{{order.date_in}}</td>
+            <td>{{order.date_out}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
