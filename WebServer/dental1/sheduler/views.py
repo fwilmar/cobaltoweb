@@ -4,6 +4,7 @@ from django.shortcuts import render
 # Create your views here.
 
 import sys
+import datetime
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import loader
@@ -30,5 +31,12 @@ def add(request):
 
 
 def index_order(request):
-	orders=Order.objects.order_by('-date_in')[:100]
+	now = datetime.datetime.now()
+	orders=get_orders_by_month(now)
 	return render(request,'sheduler/indexOrder.html',{'request':request, 'orders':orders})
+
+def get_orders_by_month(datefilter):
+	print 'Year '+str(datefilter.year)
+	print 'Month '+str(datefilter.month)
+	orders=Order.objects.filter(date_in__year=datefilter.year, date_in__month=datefilter.month)
+	return orders
