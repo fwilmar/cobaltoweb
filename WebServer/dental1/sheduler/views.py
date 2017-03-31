@@ -10,8 +10,28 @@ from django.http import HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import get_object_or_404
 from django.views import generic
-from .models import Order
+from rest_framework import viewsets
+from .models import Order, Doctor, Procedure
 from .forms import OrderForm
+from .serializers import DoctorSerializer,OrderSerializer,ProcedureSerializer
+
+
+
+class DoctorViewSet(viewsets.ModelViewSet):
+	queryset = Doctor.objects.all()
+	serializer_class = DoctorSerializer
+
+
+class ProcedureViewSet(viewsets.ModelViewSet):
+	queryset = Procedure.objects.all()
+	serializer_class = ProcedureSerializer
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+	queryset = Order.objects.all()
+	serializer_class = OrderSerializer
+
+
 
 
 def add(request):
