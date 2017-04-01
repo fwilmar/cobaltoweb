@@ -14,8 +14,8 @@ from rest_framework import viewsets
 from .models import Order, Doctor, Procedure
 from .forms import OrderForm
 from .serializers import DoctorSerializer,OrderSerializer,ProcedureSerializer
-
-
+from rest_framework.decorators import detail_route, list_route
+from rest_framework.response import Response
 
 class DoctorViewSet(viewsets.ModelViewSet):
 	queryset = Doctor.objects.all()
@@ -31,32 +31,14 @@ class OrderViewSet(viewsets.ModelViewSet):
 	queryset = Order.objects.all()
 	serializer_class = OrderSerializer
 
-
-
-
-def add(request):
-	if request.method == 'POST':
-		form = OrderForm(request.POST)
-		if form.is_valid():
-			print 'Entro a Save!!!'
-			form.save()
-			print 'Salio del Save!!!'
-		else:
-			print 'Invalido!!!'
-		return HttpResponseRedirect('/sheduler/')
-	else:
-		print 'Entro a GET'
-		form = OrderForm()
-	return render(request, 'sheduler/formOrder.html', {'form':form})
-
-
-def index_order(request):
-	now = datetime.datetime.now()
-	orders=get_orders_by_month(now)
-	return render(request,'sheduler/indexOrder.html',{'request':request, 'orders':orders})
-
-def get_orders_by_month(datefilter):
-	print 'Year '+str(datefilter.year)
-	print 'Month '+str(datefilter.month)
-	orders=Order.objects.filter(date_in__year=datefilter.year, date_in__month=datefilter.month)
-	return orders
+	@list_route()
+	def order_month(self, request):
+		year = self.request.query_params.get('year', None)
+		month = self.request.query_params.get('month', None)
+		order_month = Order.objects.filter(date_in__year=year, date_in__month=month)
+		page = self.paginate_queryset(order_month)
+		if page is not None:
+			serializer = self.get_serializer(page, many=True)
+			return self.get_paginated_response(serializer.data)
+		serializer = self.get_serializer(order_month, many=True)
+		return Response(serializer.data)
