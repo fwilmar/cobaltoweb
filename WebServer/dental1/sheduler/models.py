@@ -18,9 +18,11 @@ class Procedure(models.Model):
 
 class Order(models.Model):
 	case = models.IntegerField()
-	doctor = models.ForeignKey(Doctor, on_delete = models.DO_NOTHING)
+	doctor = models.ForeignKey(Doctor, on_delete = models.CASCADE, related_name='orders')
 	patient = models.CharField(max_length=200)
 	procedure = models.ForeignKey(Procedure)
 	description = models.CharField(max_length=500)
 	date_in = models.DateTimeField('order date in')
 	date_out = models.DateTimeField('order date out')
+	def __unicode__(self):
+		return '%d: %s' % (self.case, self.patient)

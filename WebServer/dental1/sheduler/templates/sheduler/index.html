@@ -1,19 +1,23 @@
-{%load static%}
-<link rel="stylesheet" type="text/css" href="{% static 'sheduler/style.css' %}" />
+{% load rest_framework %}
+
+<html><body>
+
+
 {% if latest_order_list %}
     <ul>
     {% for order in latest_order_list %}
-        <li>Link <a href="/sheduler/{{ order.id }}/">{{ order.description }}</a></li>
-        <li>Link <a href="{% url 'sheduler:detail' order.id%}">{{ order.description }}</a></li>
+        <li>Link <a href="/sheduler/{{ order.id }}/">{{ order.doctor.name }}</a></li>
 
         <form action="/sheduler/{{ order.id }}/" method="post">
-        	{% csrf_token %}
-        	<label for="your_name">Your name: </label>
-        	<input id="your_name" type="text" name="your_name" value="{{ order.doctor.name }}">
-        	<input type="submit" value="OK">
+            {% csrf_token %}
+            <label for="your_name">Your nname: </label>
+            <input id="your_name" type="text" name="your_name" value="{{ order.doctor.name }}">
+            <input type="submit" value="OK">
         </form>
     {% endfor %}
     </ul>
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
+
+</body></html>

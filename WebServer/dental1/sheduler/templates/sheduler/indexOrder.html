@@ -1,44 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-    <a href="/sheduler/new/order/" style="text-align:right;float:right;padding-right:20px">Back Month</a>
 
-
-    <a href="/sheduler/new/order/" style="text-align:right;float:right;padding-right:20px">New Order</a>
-  
-    <a href="/sheduler/new/order/" style="text-align:right;float:right;padding-right:20px">Next Month</a>
-
-    <br>
-    <h2 align="center">Orders administrator</h2>
-
-    <table id="tablaConcursos" style="font-family:Verdana, Geneva, sans-serif" border="1">
-        <thead style="vertical-align: center; text-align: center">
-            <th style="width:8%;font-size:13px">Case</th>
-            <th style="width:15%;font-size:13px">Doctor</th>
-            <th style="width:15%;font-size:13px">Patient</th>
-            <th style="width:8%;font-size:13px">Procedure</th>
-            <th style="width:8%;font-size:13px">Description</th>
-            <th style="width:8%;font-size:13px">Date In</th>
-            <th style="width:8%;font-size:13px">Date Out</th>
-        </thead>
-
-        <tbody>
-        {% for order in orders %}
-            <tr style="vertical-align: center; text-align: center">
-            <td>{{order.case}}</td>
-            <td>{{order.doctor}}</td>
-            <td>{{order.patient}}</td>
-            <td>{{order.procedure}}</td>
-            <td>{{order.description}}</td>
-            <td>{{order.date_in}}</td>
-            <td>{{order.date_out}}</td>
+{% extends "sheduler/base.html" %}
+{% block extra_head %}
+  <style type="text/css">
+     body {
+       padding-top: 50px;
+     }
+     .start-template {
+       padding: 40px 15px;
+       text-align: center;
+     }
+  </style>
+{% endblock extra_head %}
+{% block container %}
+  <div class="container">
+    <div class="start-template">
+      <table id="tabla" data-toggle="table"
+        data-classes="table table-hover table-condensed"
+        data-row-style="rowStyle"
+        data-search="true"
+        data-show-columns="true"
+        data-show-refresh="true"
+        data-show-toggle="true"
+        data-sort-name="titulo"
+        data-sort-order="asc"
+        data-url="/sheduler/orders/">
+          <thead>
+            <tr>
+            <th data-field="case" data-sortable="true">Case</th>
+              <th data-field="doctor" data-sortable="true">Doctor</th>
+              <th data-field="patient" data-sortable="true">Patient</th>
+              <th data-field="procedure">Procedure</th>
+              <th data-field="description">Description</th>
+              <th data-field="date_in" data-sortable="true">Date In</th>
+              <th data-field="date_out" data-sortable="true">Date Out</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+          </thead>
+       </table>
+    </div>
+  </div>
+{% endblock container %}
+{% block extra_js %}
+    <script type="text/javascript">
+        function rowStyle(row, index) {
+           var celda = row['status'];
+           switch(celda) {
+               case 'Agotado':
+                   return { classes: 'warning'}
+                   break;
+               case 'Descontinuado':
+                   return { classes: 'danger'}
+                   break;
+               default:
+                   return { classes: 'default'}
+           }
+       };
+    </script>
+{% endblock extra_js %}

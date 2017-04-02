@@ -16,6 +16,12 @@ from .forms import OrderForm
 from .serializers import DoctorSerializer,OrderSerializer,ProcedureSerializer
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
+from rest_framework.renderers import TemplateHTMLRenderer
+from django.template import loader
+from django.template import RequestContext
+
+
+
 
 class DoctorViewSet(viewsets.ModelViewSet):
 	queryset = Doctor.objects.all()
@@ -33,12 +39,15 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 	@list_route()
 	def order_month(self, request):
-		year = self.request.query_params.get('year', None)
-		month = self.request.query_params.get('month', None)
+		year = self.request.query_params.get('year', 2000)
+		month = self.request.query_params.get('month', 00)
 		order_month = Order.objects.filter(date_in__year=year, date_in__month=month)
 		page = self.paginate_queryset(order_month)
 		if page is not None:
 			serializer = self.get_serializer(page, many=True)
 			return self.get_paginated_response(serializer.data)
 		serializer = self.get_serializer(order_month, many=True)
-		return Response(serializer.data)
+		data = serializer.data[:]
+		return render(request, 'sheduler/indexOrder.html',{'latest_order_list': data})
+
+
