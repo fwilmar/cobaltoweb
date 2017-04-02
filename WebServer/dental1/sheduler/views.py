@@ -19,8 +19,14 @@ from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 from django.template import loader
 from django.template import RequestContext
+import datetime
 
 
+
+def indexSheduler(request):
+	year = datetime.date.today().year
+	month = datetime.date.today().month
+	return render(request,'sheduler/indexOrder.html', {'year': year, 'month': month})
 
 
 class DoctorViewSet(viewsets.ModelViewSet):
@@ -48,6 +54,5 @@ class OrderViewSet(viewsets.ModelViewSet):
 			return self.get_paginated_response(serializer.data)
 		serializer = self.get_serializer(order_month, many=True)
 		data = serializer.data[:]
-		return render(request, 'sheduler/indexOrder.html',{'latest_order_list': data})
-
+		return Response(data)
 
