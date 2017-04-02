@@ -12,6 +12,10 @@
   </style>
 {% endblock extra_head %}
 {% block container %}
+<button type="button" class="btn btn-primary">Primary</button>
+<div class="btn btn-primary btn-lg active" id="day0" onclick="nextMonth()">Next Month</div>
+<a href="/sheduler/orders/order_month?year={{year}}&month=3" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>
+
   <div class="container">
     <div class="start-template">
       <table id="tabla" data-toggle="table"
@@ -23,7 +27,7 @@
         data-show-toggle="true"
         data-sort-name="titulo"
         data-sort-order="asc"
-        data-url="/sheduler/orders/order_month?year={{year}}&month={{month}}">
+        data-url="/sheduler/orders/order_month?year={{year}}&month=3">
           <thead>
             <tr>
               <th data-field="case" data-sortable="true">Case</th>
@@ -41,6 +45,9 @@
 {% endblock container %}
 {% block extra_js %}
     <script type="text/javascript">
+        function nextMonth(){
+            console.log('ENTRA');
+        }
         function rowStyle(row, index) {
            var celda = row['status'];
            switch(celda) {
