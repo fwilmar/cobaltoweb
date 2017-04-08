@@ -45,9 +45,14 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 	@list_route()
 	def order_month(self, request):
-		year = self.request.query_params.get('year', 2000)
-		month = self.request.query_params.get('month', 00)
-		order_month = Order.objects.filter(date_in__year=year, date_in__month=month)
+		year = self.request.query_params.get('year', None)
+		month = self.request.query_params.get('month', None)
+		if (year != None and month != None ):
+			order_month = Order.objects.filter(date_in__year=year, date_in__month=month)
+		elif year != None:
+			order_month = Order.objects.filter(date_in__year=year)
+		else :
+			order_month = Order.objects.all()
 		page = self.paginate_queryset(order_month)
 		if page is not None:
 			serializer = self.get_serializer(page, many=True)
