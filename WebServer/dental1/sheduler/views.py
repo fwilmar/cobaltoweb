@@ -28,6 +28,9 @@ def indexSheduler(request):
 	month = datetime.date.today().month
 	return render(request,'sheduler/indexOrder.html', {'year': year, 'month': month})
 
+def dashboardView(request):
+	return render(request,'sheduler/starter.html')
+
 
 class DoctorViewSet(viewsets.ModelViewSet):
 	queryset = Doctor.objects.all()

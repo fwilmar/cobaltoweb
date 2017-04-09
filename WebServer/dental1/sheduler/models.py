@@ -24,5 +24,24 @@ class Order(models.Model):
 	description = models.CharField(max_length=500)
 	date_in = models.DateTimeField('order date in')
 	date_out = models.DateTimeField('order date out')
+	cost = models.IntegerField()
 	def __unicode__(self):
 		return '%d: %s' % (self.case, self.patient)
+
+class Printed(models.Model):
+	NEW_STATUS = 1
+	IN_PROCESS_STATUS = 2
+	ENDED_STATUS = 3
+	STATUS_CHOICES = (
+		(NEW_STATUS, 'New'),
+		(IN_PROCESS_STATUS, 'InProcess'),
+		(ENDED_STATUS, 'Ended'),
+		)
+	date_process_start = models.DateTimeField()
+	date_process_end = models.DateTimeField()
+	printed_order_status = models.IntegerField()
+	status = models.IntegerField(choices=STATUS_CHOICES, default=NEW_STATUS)
+
+class OrderPrinted(models.Model):
+	order_id = models.ForeignKey(Order)
+	printed_id = models.ForeignKey(Printed)

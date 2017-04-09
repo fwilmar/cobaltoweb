@@ -1,5 +1,5 @@
 
-{% extends "sheduler/base.html" %}
+{% extends "sheduler/starter.html" %}
 {% block extra_head %}
   <style type="text/css">
      body {
@@ -11,38 +11,63 @@
      }
   </style>
 {% endblock extra_head %}
+{% block content-header %}
+      <h1>
+        Orders Management
+        <small>Add, remove, edit Orders</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+        <li class="active">Here</li>
+      </ol>
+{% endblock content-header %}
 {% block container %}
-
-   <a href="/sheduler/new/order/" style="text-align:right;float:right;padding-right:20px">New Order</a>
-
-<div class="btn btn-primary btn-lg active" id="day0" onclick="nextMonth()">Next Month</div>
-<div class="btn btn-primary btn-lg active" id="day0" onclick="prevMonth()">Prev Month</div>
-
-  <div class="container">
-    <div class="start-template">
-      <table id="tableOrder" data-toggle="table"
-        data-classes="table table-hover table-condensed"
-        data-search="true"
-        data-show-columns="true"
-        data-show-refresh="true"
-        data-show-toggle="true"
-        data-sort-name="Case"
-        data-sort-order="desc"
-        data-url="/sheduler/orders/order_month">
-          <thead>
-            <tr>
-              <th data-field="case" data-sortable="true">Case</th>
-              <th data-field="doctor" data-sortable="true">Doctor</th>
-              <th data-field="patient" data-sortable="true">Patient</th>
-              <th data-field="procedure">Procedure</th>
-              <th data-field="description">Description</th>
-              <th data-field="date_in" data-sortable="true">Date In</th>
-              <th data-field="date_out" data-sortable="true">Date Out</th>
-            </tr>
-          </thead>
-       </table>
-    </div>
-  </div>
+<section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Hover Data Table</h3>
+                <a href="/sheduler/new/order/" style="text-align:right;float:right;padding-right:20px">New Order</a>
+                <div class="btn btn-primary btn-lg active" id="day0" onclick="nextMonth()">Next Month</div>
+                <div class="btn btn-primary btn-lg active" id="day0" onclick="prevMonth()">Prev Month</div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div class="start-template">
+                  <table id="tableOrder" data-toggle="table"
+                    data-classes="table table-hover table-condensed"
+                    data-search="true"
+                    data-show-columns="true"
+                    data-show-refresh="true"
+                    data-show-toggle="true"
+                    data-sort-name="Case"
+                    data-sort-order="desc"
+                    data-url="/sheduler/orders/order_month">
+                      <thead>
+                        <tr>
+                          <th data-field="case" data-sortable="true">Case</th>
+                          <th data-field="doctor" data-sortable="true">Doctor</th>
+                          <th data-field="patient" data-sortable="true">Patient</th>
+                          <th data-field="procedure">Procedure</th>
+                          <th data-field="description">Description</th>
+                          <th data-field="date_in" data-sortable="true">Date In</th>
+                          <th data-field="date_out" data-sortable="true">Date Out</th>
+                          <th data-field="cost" data-sortable="true">Cost</th>
+                        </tr>
+                      </thead>
+                   </table>
+                </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
 {% endblock container %}
 {% block extra_js %}
     <script type="text/javascript">
@@ -53,8 +78,6 @@
         var monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
-
-
         function nextMonth(){
             monthQuery=monthQuery+1;
             if(monthQuery>12){
