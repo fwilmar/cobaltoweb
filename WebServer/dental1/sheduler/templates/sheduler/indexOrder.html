@@ -1,39 +1,37 @@
 
 {% extends "sheduler/starter.html" %}
-{% block extra_head %}
-  <style type="text/css">
-     body {
-       padding-top: 50px;
-     }
-     .start-template {
-       padding: 40px 15px;
-       text-align: center;
-     }
-  </style>
-{% endblock extra_head %}
 {% block content-header %}
       <h1>
         Orders Management
         <small>Add, remove, edit Orders</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-        <li class="active">Here</li>
-      </ol>
 {% endblock content-header %}
 {% block container %}
 <section class="content">
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-md-12">
           <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Hover Data Table</h3>
-                <a href="/sheduler/new/order/" style="text-align:right;float:right;padding-right:20px">New Order</a>
-                <div class="btn btn-primary btn-lg active" id="day0" onclick="nextMonth()">Next Month</div>
-                <div class="btn btn-primary btn-lg active" id="day0" onclick="prevMonth()">Prev Month</div>
+            <div class="box-header with-border">
+                <a class="btn btn-app pull-left" onclick="prevMonth()">
+                    <i class="fa  fa-arrow-left"></i>Prev Month
+                </a>
+                <a class="btn btn-app pull-left" onclick="nextMonth()">
+                    <i class="fa fa-arrow-right"></i>Next Month
+                </a>
+                <a class="btn btn-app pull-right">
+                    <i class="fa fa-print"></i>Print
+                </a>
+                <a class="btn btn-app pull-right" href="/sheduler/neworder">
+                    <i class="fa fa-plus-square"></i>New Order
+                </a>
             </div>
-            <!-- /.box-header -->
+            <!-- /.box-body -->
             <div class="box-body">
+                <div class="col-md-8">
+                    <div class="col-md-4">
+                        <h1 id="month-title" class="box-title">History</h1>
+                    </div>
+                </div>
                 <div class="start-template">
                   <table id="tableOrder" data-toggle="table"
                     data-classes="table table-hover table-condensed"
@@ -41,19 +39,20 @@
                     data-show-columns="true"
                     data-show-refresh="true"
                     data-show-toggle="true"
-                    data-sort-name="Case"
-                    data-sort-order="desc"
+                    data-sort-name="case"
+                    data-sort-order="asc"
                     data-url="/sheduler/orders/order_month">
                       <thead>
                         <tr>
                           <th data-field="case" data-sortable="true">Case</th>
                           <th data-field="doctor" data-sortable="true">Doctor</th>
                           <th data-field="patient" data-sortable="true">Patient</th>
-                          <th data-field="procedure">Procedure</th>
+                          <th data-field="procedure" data-sortable="true">Procedure</th>
                           <th data-field="description">Description</th>
                           <th data-field="date_in" data-sortable="true">Date In</th>
                           <th data-field="date_out" data-sortable="true">Date Out</th>
-                          <th data-field="cost" data-sortable="true">Cost</th>
+                          <th data-field="cost" data-formatter="priceFormatter" data-sortable="true">Cost</th>
+                          <th> Imprimir </th>
                         </tr>
                       </thead>
                    </table>
@@ -71,7 +70,7 @@
 {% endblock container %}
 {% block extra_js %}
     <script type="text/javascript">
-        var $table = $('#tableOrder')
+        var $table = $('#tableOrder');
         var dateNow = new Date();
         var monthQuery = dateNow.getMonth()+1;
         var yearQuery = dateNow.getFullYear();
@@ -97,7 +96,19 @@
         function refreshTableOrder(){
             // alert(monthNames[monthQuery-1]);
             // alert(yearQuery);
+            getMonthName();
             $table.bootstrapTable('refreshOptions', {url: '/sheduler/orders/order_month?year='+yearQuery+'&month='+monthQuery});
+        }
+        function getMonthName()
+        {
+            document.getElementById("month-title").innerHTML = monthNames[monthQuery-1];
+        }
+        function priceFormatter(value) {
+        // 16777215 == ffffff in decimal
+        return '<div >' +
+                '<i class="glyphicon glyphicon-usd"></i>' +
+                value+
+                '</div>';
         }
     </script>
 {% endblock extra_js %}

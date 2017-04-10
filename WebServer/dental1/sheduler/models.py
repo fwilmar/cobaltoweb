@@ -23,7 +23,7 @@ class Order(models.Model):
 	procedure = models.ForeignKey(Procedure)
 	description = models.CharField(max_length=500)
 	date_in = models.DateTimeField('order date in')
-	date_out = models.DateTimeField('order date out')
+	date_out = models.DateTimeField('order date out',null=True)
 	cost = models.IntegerField()
 	def __unicode__(self):
 		return '%d: %s' % (self.case, self.patient)

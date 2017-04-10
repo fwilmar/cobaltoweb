@@ -31,6 +31,9 @@ def indexSheduler(request):
 def dashboardView(request):
 	return render(request,'sheduler/starter.html')
 
+def newOrderView(request):
+	return render(request,'sheduler/newOrder.html')
+
 
 class DoctorViewSet(viewsets.ModelViewSet):
 	queryset = Doctor.objects.all()

@@ -8,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Starter</title>
+  <title>Cobalto | Texas Dental Services Lab</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -25,6 +25,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
         apply the skin class to the body tag so the changes take effect.
   -->
   <link rel="stylesheet" href="{% static 'sheduler/AdminLTE/dist/css/skins/skin-black.min.css' %}"/>
+  <link rel="stylesheet" href="{% static 'sheduler/AdminLTE/dist/css/skins/skin-red.min.css' %}"/>
+ <link rel="stylesheet" href="{% static 'sheduler/AdminLTE/dist/css/skins/skin-blue.min.css' %}"/>
 
 
   <!--****************************************
@@ -64,7 +66,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-black sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
   <!-- Main Header -->
@@ -73,9 +75,9 @@ desired effect
     <!-- Logo -->
     <a href="index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>TD</b>SL</span>
+      <span class="logo-mini"><b>TDSL</b></span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>TDS</b> LAB</span>
+      <span class="logo-lg"><b>COBALTO</b> TDSLAB</span>
     </a>
 
     <!-- Header Navbar -->
@@ -278,7 +280,7 @@ desired effect
             </span>
           </a>
           <ul class="treeview-menu">
-            <li ><a href="/sheduler/index"><i class="fa fa-plus-square"></i> New Order</a></li>
+            <li ><a href="/sheduler/neworder"><i class="fa fa-plus-square"></i> New Order</a></li>
             <li ><a href="/sheduler/index"><i class="fa fa-table"></i> Management Orders</a></li>
           </ul>
         </li>
@@ -422,7 +424,7 @@ desired effect
   START USER LIBRARY
 ****************************************-->
 <!-- Bootstrap table -->
-
+{% block extra_js %}{% endblock %}
 <script src="{% static 'sheduler/bootstrap/dist/bootstrap-table.js' %}"></script>
 
   <!--****************************************
