@@ -15,6 +15,9 @@
                 <a class="btn btn-app pull-left" onclick="prevMonth()">
                     <i class="fa  fa-arrow-left"></i>Prev Month
                 </a>
+                <a class="btn btn-app pull-left" onclick="getHistory()">
+                    <i class="fa fa-history"></i>History
+                </a>
                 <a class="btn btn-app pull-left" onclick="nextMonth()">
                     <i class="fa fa-arrow-right"></i>Next Month
                 </a>
@@ -28,12 +31,16 @@
             <!-- /.box-body -->
             <div class="box-body">
                 <div class="col-md-8">
-                    <div class="col-md-4">
-                        <h1 id="month-title" class="box-title">History</h1>
-                    </div>
+                        <div class="col-md-4">
+                            <h1 id="month-title" class="box-title">History</h1>
+                        </div>
+                        <div class="col-md-4 pull-left">
+                            <h4 id = "totalLabel" ></h4>
+                        </div>
                 </div>
                 <div class="start-template">
-                  <table id="tableOrder" data-toggle="table"
+                  <table id="tableOrder"
+                    data-toggle="table"
                     data-classes="table table-hover table-condensed"
                     data-search="true"
                     data-show-columns="true"
@@ -41,7 +48,9 @@
                     data-show-toggle="true"
                     data-sort-name="case"
                     data-sort-order="asc"
-                    data-url="/sheduler/orders/order_month">
+                    data-url="/sheduler/orders/order_month"
+                    data-show-footer="true"
+                    data-height=600>
                       <thead>
                         <tr>
                           <th data-field="case" data-sortable="true">Case</th>
@@ -51,7 +60,7 @@
                           <th data-field="description">Description</th>
                           <th data-field="date_in" data-sortable="true">Date In</th>
                           <th data-field="date_out" data-sortable="true">Date Out</th>
-                          <th data-field="cost" data-formatter="priceFormatter" data-sortable="true">Cost</th>
+                          <th data-field="cost" data-formatter="priceFormatter" data-sortable="true" data-footer-formatter="formatterFooterTotalBalance">Cost</th>
                           <th> Imprimir </th>
                         </tr>
                       </thead>
@@ -94,10 +103,12 @@
             refreshTableOrder();
         }
         function refreshTableOrder(){
-            // alert(monthNames[monthQuery-1]);
-            // alert(yearQuery);
             getMonthName();
             $table.bootstrapTable('refreshOptions', {url: '/sheduler/orders/order_month?year='+yearQuery+'&month='+monthQuery});
+        }
+        function getHistory(){
+            document.getElementById("month-title").innerHTML = 'History';
+            $table.bootstrapTable('refreshOptions', {url: '/sheduler/orders/order_month'});
         }
         function getMonthName()
         {
@@ -110,5 +121,28 @@
                 value+
                 '</div>';
         }
+        function formatterFooterTotalBalance(data) {
+            return formatterReturnTotalString(data,'cost','Total: ');
+        }
+
+        function formatterReturnTotalString(data,field,prefix) {
+            var total = 0;
+            $.each(data, function (i, row) {
+                total += row[field];
+            });
+            if(total > 0){
+                document.getElementById("totalLabel").innerHTML = "Total = "+priceFormatter(total);
+            }else
+            {
+                document.getElementById("totalLabel").innerHTML = ' ';
+            }
+            return prefix+total;
+        }
+
+        /* TO-DO WAF
+        function getHeight() {
+            console.log("VALOR HEIGHT"+$(window).height() - $('h1').outerHeight(true))
+            return $(window).height() - $('h1').outerHeight(true);
+        }*/
     </script>
 {% endblock extra_js %}
