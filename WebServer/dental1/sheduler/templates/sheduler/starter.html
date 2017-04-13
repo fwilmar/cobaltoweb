@@ -26,14 +26,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
   -->
   <link rel="stylesheet" href="{% static 'sheduler/AdminLTE/dist/css/skins/skin-black.min.css' %}"/>
   <link rel="stylesheet" href="{% static 'sheduler/AdminLTE/dist/css/skins/skin-red.min.css' %}"/>
- <link rel="stylesheet" href="{% static 'sheduler/AdminLTE/dist/css/skins/skin-blue.min.css' %}"/>
+  <link rel="stylesheet" href="{% static 'sheduler/AdminLTE/dist/css/skins/skin-blue.min.css' %}"/>
 
 
   <!--****************************************
   START USER LIBRARY -  bootstrap-table
 ****************************************-->
 
+<!-- Bootstrap select -->
+  <link rel="stylesheet" href="{% static 'css/bootstrap-select.min.css' %}"/>
+
+
+<!-- Bootstrap table -->
   <link rel="stylesheet" href="{% static 'sheduler/bootstrap/dist/bootstrap-table.css' %}"/>
+
 
   <!--****************************************
   END USER LIBRARY -  bootstrap-table
@@ -416,17 +422,24 @@ desired effect
 
 <!-- Bootstrap 3.3.7 -->
 <script src="{% static 'sheduler/bootstrap/js/bootstrap.min.js' %}"></script>
-<!-- AdminLTE App -->
+
 <!-- <script src="dist/js/app.min.js"></script> -->
-<script src="{% static 'sheduler/AdminLTE/dist/js/app.min.js' %}"></script>
 
   <!--****************************************
   START USER LIBRARY
 ****************************************-->
+
+<!-- Bootstrap select -->
+<script src="{% static 'js/bootstrap-select.min.js' %}"></script>
+
+<!-- AdminLTE App -->
+<script src="{% static 'sheduler/AdminLTE/dist/js/app.min.js' %}"></script>
+
 <!-- Bootstrap table -->
-{% block extra_js %}{% endblock %}
 <script src="{% static 'sheduler/bootstrap/dist/bootstrap-table.js' %}"></script>
 
+<script src="{% static 'source/toolCase.js' %}"></script>
+{% block extra_js %}{% endblock %}
   <!--****************************************
   END USER LIBRARY -
 ****************************************-->
