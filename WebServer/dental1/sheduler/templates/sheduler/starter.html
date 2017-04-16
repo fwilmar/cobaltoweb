@@ -22,7 +22,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 ****************************************-->
 
   <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="{% static 'sheduler/bootstrap/css/bootstrap.min.css' %}"/>
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
 
 
     <!-- Theme style -->
@@ -35,15 +35,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
   -->
   <link rel="stylesheet" href="{% static 'css/skin-blue.min.css' %}"/>
 
-
-
 <!-- Bootstrap select -->
   <link rel="stylesheet" href="{% static 'css/bootstrap-select.min.css' %}"/>
-
 
 <!-- Bootstrap table -->
   <link rel="stylesheet" href="{% static 'css/bootstrap-table.min.css' %}"/>
 
+<!-- datepicker3 -->
+  <link rel="stylesheet" href="{% static 'css/datepicker3.css' %}"/>
+
+<!-- Bootstrap table -->
+  <link rel="stylesheet" href="{% static 'css/daterangepicker.css' %}"/>
 
   <!--****************************************
   END USER LIBRARY -  bootstrap-table
@@ -199,14 +201,14 @@ desired effect
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="{% static 'sheduler/AdminLTE/dist/img/user2-160x160.jpg' %}" class="user-image" alt="User Image">
+              <img src="{% static 'img/user2-160x160.jpg' %}" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               <span class="hidden-xs">TexasDentalServicesLab</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="{% static 'sheduler/AdminLTE/dist/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
+                <img src="{% static 'img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
 
                 <p>
                   Texas Dental Services Lab
@@ -256,7 +258,7 @@ desired effect
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="{% static 'sheduler/AdminLTE/dist/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
+          <img src="{% static 'img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>Texas Dental Services Lab</p>
@@ -280,21 +282,8 @@ desired effect
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
-
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-ambulance"></i>
-            <span>Orders</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li ><a href="/sheduler/neworder"><i class="fa fa-plus-square"></i> New Order</a></li>
-            <li ><a href="/sheduler/index"><i class="fa fa-table"></i> Management Orders</a></li>
-          </ul>
-        </li>
-
+        <li ><a href="/sheduler/index"><i class="fa fa-inbox"></i><span>Orders</span></a></li>
+        <li ><a href="/sheduler/neworder"><i class="fa fa-plus-square"></i> <span>New Order</span></a></li>
         <li class="treeview">
           <a href="#">
             <i class="fa fa-wrench"></i> <span>Admin</span>
@@ -334,10 +323,10 @@ desired effect
   <footer class="main-footer">
     <!-- To the right -->
     <div class="pull-right hidden-xs">
-      Anything you want
+      Cobalto - Dental Lab
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2017 <a href="https://www.texasdentalserviceslab.com/">texasdentalserviceslab</a>.</strong> All rights reserved.
   </footer>
 
   <!-- Control Sidebar -->
@@ -435,14 +424,24 @@ desired effect
 
 <!-- Bootstrap select -->
 <script src="{% static 'js/bootstrap-select.min.js' %}"></script>
-
 <!-- AdminLTE App -->
 <script src="{% static 'js/app.min.js' %}"></script>
-
 <!-- Bootstrap table -->
 <script src="{% static 'js/bootstrap-table.min.js' %}"></script>
+<!-- Bootstrap datepicker -->
+<script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+<!-- moment -->
+<script src="{% static 'js/moment.min.js' %}"></script>
+<!-- daterangepicker -->
+<script src="{% static 'js/daterangepicker.js' %}"></script>
 
-<script src="{% static 'source/toolCase.js' %}"></script>
+
+
+
+
+<script src="{% static 'source/doctor.js' %}"></script>
+<script src="{% static 'source/order.js' %}"></script>
+<script src="{% static 'source/procedure.js' %}"></script>
 {% block extra_js %}{% endblock %}
   <!--****************************************
   END USER LIBRARY -

@@ -11,12 +11,11 @@
 //     }
 // });
 
-var toolCaseJs= {
+var toolDoctorJs= {
 	functionResponse: null,
 	loadDoctors: function(schedule){
-        toolCaseJs.functionResponse = toolCaseJs.responseDoctors;
-        toolCaseJs.requestRest('/sheduler/doctors');
-        return toolCaseJs.functionResponse;
+        toolDoctorJs.functionResponse = toolDoctorJs.responseDoctors;
+        toolDoctorJs.requestRest('/sheduler/doctors');
     },
 	responseDoctors: function(data){
 		var options;
@@ -32,7 +31,7 @@ var toolCaseJs= {
             dataType: 'json',
             url: urlRest,
             success: function(data) {
-                toolCaseJs.functionResponse(data);
+                toolDoctorJs.functionResponse(data);
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert("Error en la respuesta JSON");

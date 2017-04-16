@@ -18,7 +18,7 @@ class Procedure(models.Model):
 
 class Order(models.Model):
 	case = models.IntegerField()
-	doctor = models.ForeignKey(Doctor, on_delete = models.CASCADE, related_name='orders')
+	doctor = models.ForeignKey(Doctor)
 	patient = models.CharField(max_length=200)
 	procedure = models.ForeignKey(Procedure)
 	description = models.CharField(max_length=500)

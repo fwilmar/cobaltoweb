@@ -4,29 +4,32 @@ from django.shortcuts import render
 # Create your views here.
 
 import sys
-import datetime
+from datetime import datetime
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import loader
 from django.shortcuts import get_object_or_404
 from django.views import generic
-from rest_framework import viewsets
-from .models import Order, Doctor, Procedure
-from .forms import OrderForm
-from .serializers import DoctorSerializer,OrderSerializer,ProcedureSerializer
-from rest_framework.decorators import detail_route, list_route
+
+from rest_framework import viewsets, status
+from rest_framework import generics
+from rest_framework.decorators import detail_route, list_route,api_view
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.views import APIView
+
+from .models import Order, Doctor, Procedure
+from .forms import OrderForm
+from .serializers import DoctorSerializer,OrderSerializer,ProcedureSerializer,OrderSerializerPost
+
 from django.template import loader
 from django.template import RequestContext
-import datetime
+
 
 
 
 def indexSheduler(request):
-	year = datetime.date.today().year
-	month = datetime.date.today().month
-	return render(request,'sheduler/indexOrder.html', {'year': year, 'month': month})
+	return render(request,'sheduler/indexOrder.html')
 
 def dashboardView(request):
 	return render(request,'sheduler/starter.html')
@@ -59,7 +62,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 			elif year != None:
 				order_month = Order.objects.filter(date_in__year=year)
 			else :
-				order_month = Order.objects.all()
+				order_month = Order.objects.filter(date_in__year=datetime.now().year, date_in__month=datetime.now().month)
 			page = self.paginate_queryset(order_month)
 			if page is not None:
 				serializer = self.get_serializer(page, many=True)
@@ -69,10 +72,21 @@ class OrderViewSet(viewsets.ModelViewSet):
 			return Response(data)
 
 
+@api_view(['GET', 'POST', 'DELETE'])
+def createOrder(request):
+	serializer = OrderSerializerPost(data=request.data)
+	if serializer.is_valid():
+		serializer.save()
+		return Response(serializer.data, status=status.HTTP_201_CREATED)
+	return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST', 'DELETE'])
 def add(request):
+	print 'Entro a evaluar!!!'
 	if request.method == 'POST':
-		form = OrderForm(request.POST)
-		if form.is_valid():
+		serializer = OrderSerializer(data=request.data)
+		print request.data
+		if serializer.is_valid():
 			print 'Entro a Save!!!'
 			form.save()
 			print 'Salio del Save!!!'

@@ -1,9 +1,8 @@
 from rest_framework.routers import DefaultRouter
-from sheduler.views import DoctorViewSet,ProcedureViewSet,OrderViewSet,indexSheduler, add,dashboardView, newOrderView
+from sheduler.views import DoctorViewSet,ProcedureViewSet,OrderViewSet,indexSheduler, add,dashboardView, newOrderView,createOrder
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from django.template import loader
-
 
 
 app_name = 'sheduler'
@@ -17,6 +16,7 @@ urlpatterns =[
  	url(r'^index/$', indexSheduler),
  	url(r'^neworder/$', newOrderView),
  	url(r'^new/order/$', add, name='add'),
+ 	url(r'^createorder/$', createOrder),
  	url(r'^dashboard/$', dashboardView),
  ]
 
