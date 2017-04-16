@@ -16,6 +16,11 @@ class Procedure(models.Model):
 	def __str__(self):
 		return self.name
 
+class LabStation(models.Model):
+	name = models.CharField(max_length=200)
+	def __str__(self):
+		return self.name
+
 class Order(models.Model):
 	case = models.IntegerField()
 	doctor = models.ForeignKey(Doctor)
@@ -24,7 +29,8 @@ class Order(models.Model):
 	description = models.CharField(max_length=500)
 	date_in = models.DateTimeField('order date in')
 	date_out = models.DateTimeField('order date out',null=True)
-	cost = models.IntegerField()
+	cost = models.IntegerField(blank=True,null=True)
+	station = models.ForeignKey(LabStation,null=True)
 	def __unicode__(self):
 		return '%d: %s' % (self.case, self.patient)
 

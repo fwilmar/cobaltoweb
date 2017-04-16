@@ -7,6 +7,8 @@ var toolOrderJs= {
         var strDoctor = e.options[e.selectedIndex].value;
         e = document.getElementById("listProcedures");
         var strProcedure = e.options[e.selectedIndex].value;
+        e = document.getElementById("listStations");
+        var strStation = e.options[e.selectedIndex].value;
         var date_in_format = document.getElementById("datepickerIn").value+"T00:00:00-0700";
         var date_out_format = document.getElementById("datepickerOut").value+"T00:00:00-0700";
         if(document.getElementById("inputCase").value == "" || strDoctor == null ||
@@ -20,9 +22,10 @@ var toolOrderJs= {
                 "doctor": strDoctor,
                 "patient": document.getElementById("inputPatient").value,
                 "procedure": strProcedure,
-                "description": document.getElementById("inputDescription").value,
+                "description": strStation,
                 "date_in" : date_in_format,
                 "date_out" : date_out_format,
+                "statin" : document.getElementById("inputPatient").value,
                 "cost" : document.getElementById("inputCost").value
             }
             toolOrderJs.requestPost("/sheduler/createorder/",objectOrder);

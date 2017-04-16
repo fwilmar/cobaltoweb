@@ -18,9 +18,9 @@ from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.views import APIView
 
-from .models import Order, Doctor, Procedure
+from .models import Order, Doctor, Procedure, LabStation
 from .forms import OrderForm
-from .serializers import DoctorSerializer,OrderSerializer,ProcedureSerializer,OrderSerializerPost
+from .serializers import DoctorSerializer,OrderSerializer,ProcedureSerializer,OrderSerializerPost, LabStationSerializer
 
 from django.template import loader
 from django.template import RequestContext
@@ -46,6 +46,10 @@ class DoctorViewSet(viewsets.ModelViewSet):
 class ProcedureViewSet(viewsets.ModelViewSet):
 	queryset = Procedure.objects.all()
 	serializer_class = ProcedureSerializer
+
+class LabStationViewSet(viewsets.ModelViewSet):
+	queryset = LabStation.objects.all()
+	serializer_class = LabStationSerializer
 
 
 class OrderViewSet(viewsets.ModelViewSet):
