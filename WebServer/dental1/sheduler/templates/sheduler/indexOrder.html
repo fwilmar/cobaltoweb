@@ -15,8 +15,8 @@
                 <a class="btn btn-app pull-left" onclick="prevMonth()">
                     <i class="fa  fa-arrow-left"></i>Prev Month
                 </a>
-                <a class="btn btn-app pull-left" onclick="getHistory()">
-                    <i class="fa fa-history"></i>History
+                <a class="btn btn-app pull-left" onclick="getACurrentMonth()">
+                    <i class="fa fa-history"></i>Current
                 </a>
                 <a class="btn btn-app pull-left" onclick="nextMonth()">
                     <i class="fa fa-arrow-right"></i>Next Month
@@ -24,7 +24,7 @@
                 <a class="btn btn-app pull-right">
                     <i class="fa fa-print"></i>Print
                 </a>
-                <a class="btn btn-app pull-right" href="/sheduler/neworder">
+                <a class="btn btn-app pull-right" href="/sheduler/formorder">
                     <i class="fa fa-plus-square"></i>New Order
                 </a>
             </div>
@@ -41,7 +41,7 @@
                 <div class="start-template">
                   <table id="tableOrder"
                     data-toggle="table"
-                    data-classes="table table-hover table-condensed"
+                    data-classes="table table-hover table-condensed table-responsive"
                     data-search="true"
                     data-show-refresh="true"
                     data-sort-name="case"
@@ -51,7 +51,7 @@
                     data-height=600>
                       <thead>
                         <tr>
-                          <th data-field="case" data-sortable="true">Case</th>
+                          <th data-field="case" data-sortable="true" data-formatter="identifierFormatter">Case</th>
                           <th data-field="doctor" data-sortable="true">Doctor</th>
                           <th data-field="patient" data-sortable="true">Patient</th>
                           <th data-field="procedure" data-sortable="true">Procedure</th>
@@ -106,11 +106,10 @@
             getMonthName();
             $table.bootstrapTable('refreshOptions', {url: '/sheduler/orders/order_month?year='+yearQuery+'&month='+monthQuery});
         }
-        function getHistory(){
-            document.getElementById("month-title").innerHTML = 'History';
+        function getACurrentMonth(){
             monthQuery = dateNow.getMonth()+1;
             yearQuery = dateNow.getFullYear();
-            $table.bootstrapTable('refreshOptions', {url: '/sheduler/orders'});
+            refreshTableOrder();
         }
         function getMonthName()
         {
@@ -140,7 +139,12 @@
             }
             return prefix+total;
         }
-
+        function identifierFormatter(value, row, index) {
+            return [
+                    '<a class="like" href="/sheduler/formorder?fonum='+value+'" title="formorder">',
+                        value,
+                    '</a>'].join('');
+        }
         /* TO-DO WAF
         function getHeight() {
             console.log("VALOR HEIGHT"+$(window).height() - $('h1').outerHeight(true))

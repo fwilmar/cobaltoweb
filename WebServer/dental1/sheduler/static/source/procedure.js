@@ -9,7 +9,7 @@ var toolProcedureJs= {
         for (var i = 0; i < data['length']; i++) {
             options += "<option value='"+data[i]['id']+"'>"+data[i]['name']+"</option>";
         }
-        $("#listProcedures").append(options);
+        $('#listProcedures').append(options);
         $('#listProcedures').selectpicker('refresh');
     },
 	requestRest: function(urlRest) {

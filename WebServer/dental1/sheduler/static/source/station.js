@@ -9,7 +9,7 @@ var toolStationJs= {
         for (var i = 0; i < data['length']; i++) {
             options += "<option value='"+data[i]['id']+"'>"+data[i]['name']+"</option>";
         }
-        $("#listStations").append(options);
+        $('#listStations').append(options);
         $('#listStations').selectpicker('refresh');
     },
 	requestRest: function(urlRest) {

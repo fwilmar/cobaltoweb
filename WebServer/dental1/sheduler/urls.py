@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from sheduler.views import DoctorViewSet,ProcedureViewSet,OrderViewSet,indexSheduler, add,dashboardView, newOrderView,createOrder,LabStationViewSet
+from sheduler.views import *
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from django.template import loader
@@ -15,9 +15,9 @@ router.register(prefix='stations', viewset=LabStationViewSet)
 urlpatterns =[
  	url(r'^', include(router.urls)),
  	url(r'^index/$', indexSheduler),
- 	url(r'^neworder/$', newOrderView),
+ 	url(r'^formorder/$', formOrderView),
  	url(r'^new/order/$', add, name='add'),
- 	url(r'^createorder/$', createOrder),
+ 	url(r'^printorder/$', printOrder),
  	url(r'^dashboard/$', dashboardView),
  ]
 

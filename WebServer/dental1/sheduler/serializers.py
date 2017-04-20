@@ -21,6 +21,11 @@ class LabStationSerializer(serializers.ModelSerializer):
 		fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Order
+		fields = '__all__'
+
+class OrderSerializerList(serializers.ModelSerializer):
 	doctor = serializers.StringRelatedField(many=False)
 	procedure = serializers.StringRelatedField(many=False)
 	station = serializers.StringRelatedField(many=False)

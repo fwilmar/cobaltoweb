@@ -31,8 +31,8 @@ class Order(models.Model):
 	date_out = models.DateTimeField('order date out',null=True)
 	cost = models.IntegerField(blank=True,null=True)
 	station = models.ForeignKey(LabStation,null=True)
-	def __unicode__(self):
-		return '%d: %s' % (self.case, self.patient)
+	# def __unicode__(self):
+	# 	return '%d: %s' % (self.case, self.patient)
 
 class Printed(models.Model):
 	NEW_STATUS = 1

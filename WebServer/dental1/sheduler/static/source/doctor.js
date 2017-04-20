@@ -22,7 +22,7 @@ var toolDoctorJs= {
         for (var i = 0; i < data['length']; i++) {
             options += "<option value='"+data[i]['id']+"'>"+data[i]['name']+"</option>";
         }
-        $("#listDoctors").append(options);
+        $('#listDoctors').append(options);
         $('#listDoctors').selectpicker('refresh');
     },
 	requestRest: function(urlRest) {

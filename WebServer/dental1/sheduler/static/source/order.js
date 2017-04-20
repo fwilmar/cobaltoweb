@@ -1,8 +1,14 @@
 var toolOrderJs= {
-	functionResponse: null,
+	functionResponseGet: null,
     day:null,
     schedule:null,
+    updateOrder: function(){
+        toolOrderJs.buildOrder('upadte');
+    },
     saveOrder: function(){
+        toolOrderJs.buildOrder('save');
+    },
+    buildOrder: function(action){
         var e = document.getElementById("listDoctors");
         var strDoctor = e.options[e.selectedIndex].value;
         e = document.getElementById("listProcedures");
@@ -22,13 +28,33 @@ var toolOrderJs= {
                 "doctor": strDoctor,
                 "patient": document.getElementById("inputPatient").value,
                 "procedure": strProcedure,
-                "description": strStation,
+                "description": document.getElementById("inputDescription").value,
                 "date_in" : date_in_format,
                 "date_out" : date_out_format,
-                "statin" : document.getElementById("inputPatient").value,
+                "station" : strStation,
                 "cost" : document.getElementById("inputCost").value
             }
-            toolOrderJs.requestPost("/sheduler/createorder/",objectOrder);
+            console.log(' EVALUA!!! ');
+            if(action=="save"){
+                console.log(' -----save--- ');
+                toolOrderJs.requestPost("/sheduler/orders/",objectOrder);
+            }else{
+                console.log(' -----update--- ');
+                toolOrderJs.requestPUT("/sheduler/orders/",objectOrder);
+            }
+
+
+        }
+    },
+    printOrder: function(action){
+        if(document.getElementById("inputCase").value==""){
+            alert("Falta diligenciar  información de la sección")
+        } else {
+            var objectOrder = {
+                "case": document.getElementById("inputCase").value
+            }
+            console.log(' -----printOrder--- ');
+            toolOrderJs.requestPost("/sheduler/printorder",objectOrder);
         }
     },
     requestPost: function(urlRest, objectOrder) {
@@ -43,8 +69,61 @@ var toolOrderJs= {
                     alert('Order saved');
                  },
                  error: function (xhr) {
-                     alert("Error en la respuesta JSON");
+                    console.log(xhr.responseText);
+                    alert("Error en la respuesta JSON");
                  }
              });
-    }
+    },
+    loadOrder: function(idOrder) {
+        toolOrderJs.functionResponseGet = toolOrderJs.responseOrder;
+        toolOrderJs.requestRest('/sheduler/orders/order_case?fonum='+idOrder);
+    },
+    responseOrder: function(data){
+            $('#inputCase').val(data.case);
+
+            $('#listProcedures').val(data.procedure);
+            $('#listProcedures').selectpicker('refresh');
+
+            $('#listDoctors').val(data.doctor);
+            $('#listDoctors').selectpicker('refresh');
+            $('#inputPatient').val(data.patient);
+
+            $('#inputDescription').val(data.description);
+            $('#datepickerIn').val(data.date_in.split('T')[0]);
+            $('#datepickerOut').val(data.date_out.split('T')[0]);
+            $('#listStations').val(data.station);
+            $('#listStations').selectpicker('refresh');
+            // $('#listDoctors option:contains('+data.doctor+')').attr('selected', true).trigger('change');
+            $('#inputCost').val(data.cost);
+
+    },
+    requestRest: function(urlRest) {
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: urlRest,
+            success: function(data) {
+                toolOrderJs.functionResponseGet(data);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                alert("Error en la respuesta JSON");
+            }
+        });
+    },
+    requestPUT: function(urlRest, objectOrder) {
+            $.ajax({
+                 type: "PUT",
+                 url: urlRest,
+                 data: JSON.stringify(objectOrder),
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 processData: true,
+                 success: function (data, status, jqXHR) {
+                    alert('Order saved');
+                 },
+                 error: function (xhr) {
+                    alert("Order saved - JSON");
+                 }
+             });
+    },
 }

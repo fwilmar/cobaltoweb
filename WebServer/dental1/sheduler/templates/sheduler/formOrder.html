@@ -1,10 +1,145 @@
-{%load static%}
-<link rel="stylesheet" type="text/css" href="{% static 'sheduler/style.css' %}" />
 
-<h3>Nueva Orden</h3>
+{% extends "sheduler/starter.html" %}
+{% block content-header %}
+      <h1>
+        New Order
+        <small>Create new order</small>
+      </h1>
+{% endblock content-header %}
+{% block container %}
+    <section class="content">
+        <div class="row">
+            <div class="col-md-8">
+              <!-- Horizontal Form -->
+              <div class="schedule-master" id="containerSchedule"></div>
+              <div class="box box-info">
+                <div class="box-header with-border">
+                  <a class="btn btn-app pull-left" href="/sheduler/index">
+                    <i class="fa fa-inbox"></i>Orders
+                  </a>
+                  <a id="btn-print" class="btn btn-app pull-right" onclick="printOrder()">
+                    <i class="fa fa-print"></i>Print
+                  </a>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" id="form-order">
+                {% csrf_token %}
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label for="inputCase" class="col-sm-2 control-label">Case</label>
+                      <div class="col-sm-10">
+                        <input type="number" class="form-control" id="inputCase" placeholder="Case">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputDoctor" class="col-sm-2 control-label">Doctor</label>
+                      <div class="col-sm-10">
+                          <select name='listDoctors[]' id="listDoctors" class='selectpicker show-tick form-control' data-live-search='true'>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputPatient" class="col-sm-2 control-label">Patient</label>
+                      <div class="col-sm-10">
+                            <input id="inputPatient" type="text" class="form-control" placeholder="Patient Name">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputProcedure" class="col-sm-2 control-label">Procedure</label>
+                      <div class="col-sm-10">
+                          <select name='listProcedures[]' id="listProcedures" class='selectpicker show-tick form-control' data-live-search='true'>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputDescription" class="col-sm-2 control-label">Description</label>
+                      <div class="col-sm-10">
+                            <textarea id="inputDescription" class="form-control" rows="3" placeholder="Enter Description ...."></textarea>
+                      </div>
+                    </div>
+                      <!-- Date -->
+                    <div class="form-group">
+                        <label for="datepickerIn" class="col-sm-2 control-label">Date In:</label>
+                        <div class="col-sm-9 date">
+                            <input type="text" class="form-control" id="datepickerIn" placeholder="Date In">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="datepickerOut" class="col-sm-2 control-label">Date Out:</label>
+                        <div class="col-sm-9 date">
+                            <input type="text" class="form-control" id="datepickerOut" placeholder="Date Out">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputStation" class="col-sm-2 control-label">Lab Station</label>
+                      <div class="col-sm-10">
+                          <select name='listStations[]' id="listStations" class='selectpicker show-tick form-control' data-live-search='true'>
+                          </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="inputCost" class="col-sm-2 control-label">Cost</label>
+                      <div class="col-sm-10">
+                            <input id="inputCost" type="Number" class="form-control" placeholder="Cost">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /.box-body " -->
+                  <div class="box-footer">
+                    <button type="submit"  class="btn btn-info pull-right">Save Order</button>
+                  </div>
+                  <!-- /.box-footer -->
+                </form>
+              </div>
+            </div>
+        </div>
+          <!-- /.row -->
+    </section>
+{% endblock container %}
+{% block extra_js %}
+    <script type="text/javascript">
+        var typeform;
+        if(get('fonum')!=null)
+        {
+          toolOrderJs.loadOrder(get('fonum'));
+          typeform = 'update';
+        }else
+          typeform = 'save';
 
-<form action="/sheduler/new/order/" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
-</form>
+
+        $('#form-order').submit(function(){
+            if(typeform=='save')
+              toolOrderJs.saveOrder();
+            else
+              toolOrderJs.updateOrder();
+        });
+
+
+        toolDoctorJs.loadDoctors();
+        toolProcedureJs.loadProcedures();
+        toolStationJs.loadStations();
+        //Date picker
+        $('#datepickerIn').datepicker({
+          autoclose: true,
+          format: 'yyyy-mm-dd',
+          defaultDate: +0
+        });
+                //Date picker
+        $('#datepickerOut').datepicker({
+          autoclose: true,
+          format: 'yyyy-mm-dd'
+        });
+        function printOrder()
+        {
+            toolOrderJs.printOrder(get('fonum'));
+        }
+        function get(name){
+           if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search));
+           if(name != null)
+              return decodeURIComponent(name[1]);
+           else
+            return null;
+        }
+    </script>
+{% endblock extra_js %}
