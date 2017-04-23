@@ -1,4 +1,8 @@
-# cobaltoweb
+# Cobalto
+Aplicación con:
+- Python
+- Django
+- Django rest framework
 - Bootstrap select
 - Ajax
 
