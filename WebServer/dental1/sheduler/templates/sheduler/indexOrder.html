@@ -1,60 +1,91 @@
 
-{% extends "sheduler/base.html" %}
-{% block extra_head %}
-  <style type="text/css">
-     body {
-       padding-top: 50px;
-     }
-     .start-template {
-       padding: 40px 15px;
-       text-align: center;
-     }
-  </style>
-{% endblock extra_head %}
+{% extends "sheduler/starter.html" %}
+{% block content-header %}
+      <h1>
+        Orders Management
+        <small>Add, remove, edit Orders</small>
+      </h1>
+{% endblock content-header %}
 {% block container %}
-
-   <a href="/sheduler/new/order/" style="text-align:right;float:right;padding-right:20px">New Order</a>
-
-<div class="btn btn-primary btn-lg active" id="day0" onclick="nextMonth()">Next Month</div>
-<div class="btn btn-primary btn-lg active" id="day0" onclick="prevMonth()">Prev Month</div>
-
-  <div class="container">
-    <div class="start-template">
-      <table id="tableOrder" data-toggle="table"
-        data-classes="table table-hover table-condensed"
-        data-search="true"
-        data-show-columns="true"
-        data-show-refresh="true"
-        data-show-toggle="true"
-        data-sort-name="Case"
-        data-sort-order="desc"
-        data-url="/sheduler/orders/order_month">
-          <thead>
-            <tr>
-              <th data-field="case" data-sortable="true">Case</th>
-              <th data-field="doctor" data-sortable="true">Doctor</th>
-              <th data-field="patient" data-sortable="true">Patient</th>
-              <th data-field="procedure">Procedure</th>
-              <th data-field="description">Description</th>
-              <th data-field="date_in" data-sortable="true">Date In</th>
-              <th data-field="date_out" data-sortable="true">Date Out</th>
-            </tr>
-          </thead>
-       </table>
-    </div>
-  </div>
+<section class="content">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="box">
+            <div class="box-header with-border">
+                <a class="btn btn-app pull-left" onclick="prevMonth()">
+                    <i class="fa  fa-arrow-left"></i>Prev Month
+                </a>
+                <a class="btn btn-app pull-left" onclick="getACurrentMonth()">
+                    <i class="fa fa-history"></i>Current
+                </a>
+                <a class="btn btn-app pull-left" onclick="nextMonth()">
+                    <i class="fa fa-arrow-right"></i>Next Month
+                </a>
+                <a class="btn btn-app pull-right">
+                    <i class="fa fa-print"></i>Print
+                </a>
+                <a class="btn btn-app pull-right" href="/sheduler/formorder">
+                    <i class="fa fa-plus-square"></i>New Order
+                </a>
+            </div>
+            <!-- /.box-body -->
+            <div class="box-body">
+                <div class="col-md-8">
+                        <div class="col-md-8">
+                            <h2 id="month-title" class="box-title">History</h2>
+                        </div>
+                        <div class="col-md-4 pull-right">
+                            <h3 id = "totalLabel" ></h3>
+                        </div>
+                </div>
+                <div class="start-template">
+                  <table id="tableOrder"
+                    data-toggle="table"
+                    data-classes="table table-hover table-condensed table-responsive"
+                    data-search="true"
+                    data-show-refresh="true"
+                    data-sort-name="case"
+                    data-sort-order="asc"
+                    data-url="/sheduler/orders/order_month"
+                    data-show-footer="true"
+                    data-height=600>
+                      <thead>
+                        <tr>
+                          <th data-field="case" data-sortable="true" data-formatter="identifierFormatter">Case</th>
+                          <th data-field="doctor" data-sortable="true">Doctor</th>
+                          <th data-field="patient" data-sortable="true">Patient</th>
+                          <th data-field="procedure" data-sortable="true">Procedure</th>
+                          <th data-field="description">Description</th>
+                          <th data-field="station" data-sortable="true">LabStation</th>
+                          <th data-field="date_in" data-sortable="true">Date In</th>
+                          <th data-field="date_out" data-sortable="true">Date Out</th>
+                          <th data-field="cost" data-formatter="priceFormatter" data-sortable="true" data-footer-formatter="formatterFooterTotalBalance">Cost</th>
+                          <th> Imprimir </th>
+                        </tr>
+                      </thead>
+                   </table>
+                </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
 {% endblock container %}
 {% block extra_js %}
     <script type="text/javascript">
-        var $table = $('#tableOrder')
+        var $table = $('#tableOrder');
         var dateNow = new Date();
         var monthQuery = dateNow.getMonth()+1;
         var yearQuery = dateNow.getFullYear();
         var monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
-
-
+        refreshTableOrder();
         function nextMonth(){
             monthQuery=monthQuery+1;
             if(monthQuery>12){
@@ -72,9 +103,52 @@
             refreshTableOrder();
         }
         function refreshTableOrder(){
-            // alert(monthNames[monthQuery-1]);
-            // alert(yearQuery);
+            getMonthName();
             $table.bootstrapTable('refreshOptions', {url: '/sheduler/orders/order_month?year='+yearQuery+'&month='+monthQuery});
         }
+        function getACurrentMonth(){
+            monthQuery = dateNow.getMonth()+1;
+            yearQuery = dateNow.getFullYear();
+            refreshTableOrder();
+        }
+        function getMonthName()
+        {
+            document.getElementById("month-title").innerHTML = monthNames[monthQuery-1]+"-"+yearQuery;
+        }
+        function priceFormatter(value) {
+        // 16777215 == ffffff in decimal
+        return '<div >' +
+                '<i class="glyphicon glyphicon-usd"></i>' +
+                value+
+                '</div>';
+        }
+        function formatterFooterTotalBalance(data) {
+            return formatterReturnTotalString(data,'cost','Total: ');
+        }
+
+        function formatterReturnTotalString(data,field,prefix) {
+            var total = 0;
+            $.each(data, function (i, row) {
+                total += row[field];
+            });
+            if(total > 0){
+                document.getElementById("totalLabel").innerHTML = "Total $ "+total;
+            }else
+            {
+                document.getElementById("totalLabel").innerHTML = ' ';
+            }
+            return prefix+total;
+        }
+        function identifierFormatter(value, row, index) {
+            return [
+                    '<a class="" href="/sheduler/formorder?fonum='+row.id+'" title="formorder">',
+                        value,
+                    '</a>'].join('');
+        }
+        /* TO-DO WAF
+        function getHeight() {
+            console.log("VALOR HEIGHT"+$(window).height() - $('h1').outerHeight(true))
+            return $(window).height() - $('h1').outerHeight(true);
+        }*/
     </script>
 {% endblock extra_js %}
