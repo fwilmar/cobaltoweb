@@ -27,6 +27,18 @@ from django.template import RequestContext
 
 
 
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import landscape
+from reportlab.platypus import Image
+from reportlab.lib.units import inch
+from wsgiref.util import FileWrapper
+import csv
+
+import time
+from datetime import date
+
+
 def indexSheduler(request):
 	return render(request,'sheduler/indexOrder.html')
 
@@ -95,27 +107,34 @@ class OrderViewSet(viewsets.ModelViewSet):
 			data = serializer.data[:]
 			return Response(data)
 
-	@list_route()
-	def order_case(self, request):
-			print "entra"
-			case = self.request.query_params.get('fonum', None)
-			print "VALOR DEL CASE "+case
-			if case != None:
-				queryset = Order.objects.get(case=case)
-			serializer = OrderSerializer(queryset)
-			# data = serializer.data[:]
-			return Response(serializer.data)
+	# @list_route()
+	# def order_case(self, request):
+	# 		print "entra"
+	# 		case = self.request.query_params.get('fonum', None)
+	# 		print "VALOR DEL CASE "+case
+	# 		if case != None:
+	# 			queryset = Order.objects.get(case=case)
+	# 		serializer = OrderSerializer(queryset)
+	# 		# data = serializer.data[:]
+	# 		return Response(serializer.data)
 
 
 @api_view(['GET', 'POST', 'DELETE'])
 def printOrder(request):
-	print "entra print"
-	# serializer = OrderSerializerPost(data=request.data)
-	# if serializer.is_valid():
-	# 	serializer.save()
-	# 	return Response(serializer.data, status=status.HTTP_201_CREATED)
-	# return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-	return HttpResponseRedirect('/sheduler/index')
+	print "entra printCCCC"
+	id_order = request.query_params.get('fonum', None)
+	if id_order != None:
+		queryset = Order.objects.get(id=id_order)
+
+	pdf_file = open('TexasDentalLab-2017-04-20.pdf', 'rb')
+	today = date.today()
+	response = HttpResponse(content_type='application/pdf')
+	response['Content-Disposition'] = 'attachment; filename="%s"' % 'TexasDentalLab-2017-04-20.pdf'
+	p = canvas.Canvas(response)
+	c = canvas.Canvas("TexasDentalLab-"+str(today)+".pdf", pagesize=letter)
+	r = generate_certificate(str(id_order),"345","567",300,0,p)
+	r = generate_certificate(str(id_order),"345","567",300,0,c)
+	return response
 
 @api_view(['GET', 'POST', 'DELETE'])
 def add(request):
@@ -134,3 +153,14 @@ def add(request):
 		print 'Entro a GET'
 		form = OrderForm()
 	return render(request, 'sheduler/formOrder.html', {'form':form})
+
+
+def generate_certificate(doctor_name, patient_name, case_number, gap_left, gap_bottom,r):
+	image_width=3.9*inch
+	image_height=1.2*inch
+	infoLab = 'InfoLab.png'
+	r.drawImage(infoLab, 500, 300, width=image_width, height=image_height)
+	r.drawCentredString(100,100, "Doctor: "+doctor_name)
+	# c.drawCentredString(matrix_components[2][0]+gap_left,matrix_components[2][1]+gap_bottom, "Patient: "+patient_name)
+	r.showPage()
+	r.save()

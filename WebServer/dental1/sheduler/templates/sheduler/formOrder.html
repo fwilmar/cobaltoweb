@@ -17,7 +17,7 @@
                   <a class="btn btn-app pull-left" href="/sheduler/index">
                     <i class="fa fa-inbox"></i>Orders
                   </a>
-                  <a id="btn-print" class="btn btn-app pull-right" onclick="printOrder()">
+                  <a id="btn-print" class="btn btn-app pull-right">
                     <i class="fa fa-print"></i>Print
                   </a>
                 </div>
@@ -104,6 +104,7 @@
         {
           toolOrderJs.loadOrder(get('fonum'));
           typeform = 'update';
+          document.getElementById("btn-print").href = '/sheduler/printorder/?fonum='+get('fonum');
         }else
           typeform = 'save';
 
@@ -112,7 +113,7 @@
             if(typeform=='save')
               toolOrderJs.saveOrder();
             else
-              toolOrderJs.updateOrder();
+              toolOrderJs.updateOrder(get('fonum'));
         });
 
 
@@ -122,8 +123,7 @@
         //Date picker
         $('#datepickerIn').datepicker({
           autoclose: true,
-          format: 'yyyy-mm-dd',
-          defaultDate: +0
+          format: 'yyyy-mm-dd'
         });
                 //Date picker
         $('#datepickerOut').datepicker({

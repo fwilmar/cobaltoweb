@@ -1,5 +1,8 @@
-.DS_Store
+*.DS_Store
 *.pyc
 *.mo
 *.po
 *.sql
+*.pdf
+*.png
+*.csv
