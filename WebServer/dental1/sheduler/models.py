@@ -29,6 +29,7 @@ class Order(models.Model):
 	description = models.CharField(max_length=500)
 	date_in = models.DateTimeField('order date in')
 	date_out = models.DateTimeField('order date out',null=True)
+	due_date = models.DateTimeField('order due date',null=True)
 	cost = models.IntegerField(blank=True,null=True)
 	station = models.ForeignKey(LabStation,null=True)
 	# def __unicode__(self):
