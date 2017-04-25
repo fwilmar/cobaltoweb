@@ -31,6 +31,7 @@ class OrderSerializerList(serializers.ModelSerializer):
 	station = serializers.StringRelatedField(many=False)
 	date_in = serializers.DateTimeField(format='%m-%d-%Y')
 	date_out = serializers.DateTimeField(format='%m-%d-%Y')
+	due_date = serializers.DateTimeField(format='%m-%d-%Y')
 	class Meta:
 		model = Order
 		fields = '__all__'

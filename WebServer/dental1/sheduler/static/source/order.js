@@ -17,11 +17,14 @@ var toolOrderJs= {
         var strStation = e.options[e.selectedIndex].value;
         var date_in_format = document.getElementById("datepickerIn").value+"T00:00:00-0700";
         var date_out_format = null;
-
         console.log($("#datepickerOut").datepicker("getDate"));
         if($("#datepickerOut").datepicker("getDate") != "Invalid Date"){
-            console.log("lo q tiene datepickerOut");
             date_out_format =document.getElementById("datepickerOut").value+"T00:00:00-0700";
+        }
+        var due_date_format = null;
+        console.log($("#datepickerDue").datepicker("getDate"));
+        if($("#datepickerDue").datepicker("getDate") != "Invalid Date"){
+            due_date_format =document.getElementById("datepickerDue").value+"T00:00:00-0700";
         }
         if(document.getElementById("inputCase").value == "" || strDoctor == null ||
             document.getElementById("inputPatient").value == "" || date_in_format == null
@@ -36,6 +39,7 @@ var toolOrderJs= {
                 "procedure": strProcedure,
                 "description": document.getElementById("inputDescription").value,
                 "date_in" : date_in_format,
+                "due_date" : due_date_format,
                 "date_out" : date_out_format,
                 "station" : strStation,
                 "cost" : document.getElementById("inputCost").value
@@ -80,6 +84,8 @@ var toolOrderJs= {
             $('#datepickerIn').val(data.date_in.split('T')[0]);
             if(data.date_out!=null)
                 $('#datepickerOut').val(data.date_out.split('T')[0]);
+            if(data.due_date!=null)
+                $('#datepickerDue').val(data.due_date.split('T')[0]);
             $('#listStations').val(data.station);
             $('#listStations').selectpicker('refresh');
             // $('#listDoctors option:contains('+data.doctor+')').attr('selected', true).trigger('change');

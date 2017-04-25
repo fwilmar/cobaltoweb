@@ -12,21 +12,26 @@
         <div class="col-md-12">
           <div class="box">
             <div class="box-header with-border">
-                <a class="btn btn-app pull-left" onclick="prevMonth()">
-                    <i class="fa  fa-arrow-left"></i>Prev Month
-                </a>
-                <a class="btn btn-app pull-left" onclick="getACurrentMonth()">
-                    <i class="fa fa-history"></i>Current
-                </a>
-                <a class="btn btn-app pull-left" onclick="nextMonth()">
-                    <i class="fa fa-arrow-right"></i>Next Month
-                </a>
-                <a class="btn btn-app pull-right">
-                    <i class="fa fa-print"></i>Print
-                </a>
-                <a class="btn btn-app pull-right" href="/sheduler/formorder">
-                    <i class="fa fa-plus-square"></i>New Order
-                </a>
+                <div>
+                    <a class="btn btn-app pull-left" onclick="prevMonth()">
+                        <i class="fa  fa-arrow-left"></i>Prev Month
+                    </a>
+                </div>
+                <div>
+                    <a class="btn btn-app pull-left" onclick="getACurrentMonth()">
+                        <i class="fa fa-history"></i>Current
+                    </a>
+                </div>
+                <div>
+                    <a class="btn btn-app pull-left" onclick="nextMonth()">
+                        <i class="fa fa-arrow-right"></i>Next Month
+                    </a>
+                </div>
+                <div>
+                    <a class="btn btn-app pull-right" href="/sheduler/formorder">
+                        <i class="fa fa-plus-square"></i>New Order
+                    </a>
+                </div>
             </div>
             <!-- /.box-body -->
             <div class="box-body">
@@ -55,12 +60,12 @@
                           <th data-field="doctor" data-sortable="true">Doctor</th>
                           <th data-field="patient" data-sortable="true">Patient</th>
                           <th data-field="procedure" data-sortable="true">Procedure</th>
-                          <th data-field="description">Description</th>
+                          <th data-field="description">Lab Inst.</th>
                           <th data-field="station" data-sortable="true">LabStation</th>
                           <th data-field="date_in" data-sortable="true">Date In</th>
+                          <th data-field="due_date" data-sortable="true">Due Date</th>
                           <th data-field="date_out" data-sortable="true">Date Out</th>
                           <th data-field="cost" data-formatter="priceFormatter" data-sortable="true" data-footer-formatter="formatterFooterTotalBalance">Cost</th>
-                          <th> Imprimir </th>
                         </tr>
                       </thead>
                    </table>
