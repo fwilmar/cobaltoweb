@@ -78,11 +78,11 @@ WSGI_APPLICATION = 'dental1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dentalsoftdb',
-        'USER': 'dentalsoft',
-        'PASSWORD': 'dentalsoft',
-        'HOST': 'localhost',
-        'PORT': '5432'
+        'NAME': os.environ['DATABASE_NAME'],
+        'USER': os.environ['DATABASE_USER'],
+        'PASSWORD': os.environ['DATABASE_PASSW'],
+        'HOST': os.environ['DATABASE_HOST'],
+        'PORT': os.environ['DATABASE_PORT']
     }
 }
 
