@@ -118,7 +118,7 @@ var toolOrderJs= {
                  },
                  error: function (xhr) {
                     console.log(xhr.responseText);
-                    alert("Error en la respuesta JSON");
+                    alert("Order saved --- JSON");
                  }
              });
     },
@@ -136,7 +136,7 @@ var toolOrderJs= {
                  },
                  error: function (xhr) {
                     console.log(xhr.responseText);
-                    alert("Error en la respuesta JSON");
+                    alert("Order saved -- JSON");
                  }
              });
     },
