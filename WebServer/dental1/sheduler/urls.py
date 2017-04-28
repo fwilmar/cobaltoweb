@@ -16,6 +16,7 @@ urlpatterns =[
  	url(r'^', include(router.urls)),
  	url(r'^index/$', indexSheduler),
  	url(r'^formorder/$', formOrderView),
+ 	url(r'^editformorder/$', editFormOrderView),
  	url(r'^printorder/$', printOrder),
  	url(r'^dashboard/$', dashboardView),
  ]
