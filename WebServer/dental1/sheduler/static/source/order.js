@@ -1,7 +1,51 @@
 var toolOrderJs= {
 	functionResponseGet: null,
-    day:null,
-    schedule:null,
+    updateOrderEdit: function(idOrder){
+
+        var strDoctor = document.getElementById("inputDoctor").value;
+        var strProcedure = document.getElementById("inputProcedure").value;
+        var strStation = document.getElementById("inputStation").value;
+
+        var date_in_format = document.getElementById("datepickerIn").value+"T00:00:00-0700";
+        var date_out_format = null;
+        if($("#datepickerOut").datepicker("getDate") != "Invalid Date"){
+            date_out_format =document.getElementById("datepickerOut").value+"T00:00:00-0700";
+        }
+
+        var due_date_format = null;
+        if($("#datepickerDue").datepicker("getDate") != "Invalid Date"){
+            due_date_format =document.getElementById("datepickerDue").value+"T00:00:00-0700";
+        }
+        if(
+            strDoctor == null ||
+            date_in_format == null ||
+            strProcedure == null ||
+            document.getElementById("inputCase").value == "" ||
+            document.getElementById("inputPatient").value == "" ||
+            document.getElementById("inputCost").value == "" ||
+            document.getElementById("inputDescription").value == ""
+            ){
+                alert("Falta diligenciar  información de la sección")
+        }
+        else
+        {
+            var objectOrder = {
+                "case": document.getElementById("inputCase").value,
+                "patient": document.getElementById("inputPatient").value,
+                "description": document.getElementById("inputDescription").value,
+                "doctor": strDoctor,
+                "procedure": strProcedure,
+                "date_in" : date_in_format,
+                "due_date" : due_date_format,
+                "date_out" : date_out_format,
+                "station" : strStation,
+                "cost" : document.getElementById("inputCost").value
+            }
+            // console.log(JSON.stringify(objectOrder));
+            // alert("almacenando");
+            toolOrderJs.requestPUT('/sheduler/orders/'+idOrder+'/',objectOrder);
+        }
+    },
     updateOrder: function(idOrder){
         toolOrderJs.buildOrder('upadte',idOrder);
     },
@@ -26,10 +70,12 @@ var toolOrderJs= {
         if($("#datepickerDue").datepicker("getDate") != "Invalid Date"){
             due_date_format =document.getElementById("datepickerDue").value+"T00:00:00-0700";
         }
-        if(document.getElementById("inputCase").value == "" || strDoctor == null ||
+        if(document.getElementById("inputCase").value == ""
+            || strDoctor == null ||
             document.getElementById("inputPatient").value == "" || date_in_format == null
             || document.getElementById("inputCost").value == "" || strProcedure == null ||
-            document.getElementById("inputDescription").value == ""){
+            document.getElementById("inputDescription").value == ""
+            ){
             alert("Falta diligenciar  información de la sección")
         } else {
             var objectOrder = {
@@ -44,8 +90,8 @@ var toolOrderJs= {
                 "station" : strStation,
                 "cost" : document.getElementById("inputCost").value
             }
-            console.log(JSON.stringify(objectOrder));
-            alert("almacenando");
+            // console.log(JSON.stringify(objectOrder));
+            // alert("almacenando");
             if(action=="save"){
                 toolOrderJs.requestPost("/sheduler/orders/",objectOrder);
             }else{
@@ -71,24 +117,33 @@ var toolOrderJs= {
         toolOrderJs.requestRest('/sheduler/orders/'+idOrder);
     },
     responseOrder: function(data){
-            $('#inputCase').val(data.case);
 
-            $('#listProcedures').val(data.procedure);
-            $('#listProcedures').selectpicker('refresh');
+            // $('#listProcedures').val(data.procedure);
+            // $('#listProcedures').selectpicker('refresh');
 
-            $('#listDoctors').val(data.doctor);
-            $('#listDoctors').selectpicker('refresh');
+            // $('#listDoctors').val(data.doctor);
+            // $('#listDoctors').selectpicker('refresh');
+
+            // $('#listStations').val(data.station);
+            // $('#listStations').selectpicker('refresh');
+
+
+            $('#inputProcedure').val(data.procedure);
+            $('#inputDoctor').val(data.doctor);
+            $('#inputStation').val(data.station);
+
+
             $('#inputPatient').val(data.patient);
-
+            $('#inputCase').val(data.case);
             $('#inputDescription').val(data.description);
-            $('#datepickerIn').val(data.date_in.split('T')[0]);
+
+            $('#datepickerIn').datepicker('setDate', new Date(data.date_in));
+
             if(data.date_out!=null)
-                $('#datepickerOut').val(data.date_out.split('T')[0]);
+                $('#datepickerOut').datepicker('setDate', new Date(data.date_out));
             if(data.due_date!=null)
-                $('#datepickerDue').val(data.due_date.split('T')[0]);
-            $('#listStations').val(data.station);
-            $('#listStations').selectpicker('refresh');
-            // $('#listDoctors option:contains('+data.doctor+')').attr('selected', true).trigger('change');
+                $('#datepickerDue').datepicker('setDate', new Date(data.due_date));
+
             $('#inputCost').val(data.cost);
 
     },
@@ -133,6 +188,7 @@ var toolOrderJs= {
                  success: function (data, status, jqXHR) {
                     console.log(data);
                     alert('Order saved');
+                    window.location = "/sheduler/index/";
                  },
                  error: function (xhr) {
                     console.log(xhr.responseText);
