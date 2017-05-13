@@ -145,8 +145,10 @@
         }
 
         $('#form-order').submit(function(){
-            if(typeform=='save')
+            if(typeform=='save'){
               toolOrderJs.saveOrder();
+              window.location = "/sheduler/index/";
+            }
             else
               toolOrderJs.updateOrder(get('fonum'));
         });

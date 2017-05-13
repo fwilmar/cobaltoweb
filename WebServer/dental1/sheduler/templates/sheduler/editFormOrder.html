@@ -18,7 +18,10 @@
                     <i class="fa fa-inbox"></i>Orders
                   </a>
                   <a id="btn-print" class="btn btn-app pull-right">
-                    <i class="fa fa-print"></i>Print
+                    <i class="fa fa-print"></i>Print Case
+                  </a>
+                  <a id="btn-delete" class="btn btn-app pull-right" data-toggle="modal" data-target="#myModal">
+                    <i class="fa fa-trash"></i>Delete Case
                   </a>
                 </div>
                 <!-- /.box-header -->
@@ -100,6 +103,24 @@
             </div>
         </div>
           <!-- /.row -->
+        <!-- Modal -->
+        <div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Confirm</h4>
+              </div>
+              <div class="modal-body">
+                Confirm delete case?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="return deleteOrder();">Delete case</button>
+              </div>
+            </div>
+          </div>
+        </div>
     </section>
 {% endblock container %}
 {% block extra_js %}
@@ -107,8 +128,25 @@
 
         window.onload = function() {
           onLoadEdtiOrder();
+          $('#form-order').submit(function(){
+                toolOrderJs.updateOrderEdit(get('fonum'));
+          });
+          //Date In picker
+          $('#datepickerIn').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd'
+          });
+          //Date Due
+          $('#datepickerDue').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd'
+          });
+          //Date Out picker
+          $('#datepickerOut').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd'
+          });
         };
-
         function onLoadEdtiOrder() {
           if(get('fonum')!=null)
           {
@@ -117,28 +155,6 @@
           }else
             window.location = "/sheduler/index/";
         }
-
-
-        $('#form-order').submit(function(){
-              toolOrderJs.updateOrderEdit(get('fonum'));
-        });
-
-        //Date In picker
-        $('#datepickerIn').datepicker({
-          autoclose: true,
-          format: 'yyyy-mm-dd'
-        });
-        //Date Due
-        $('#datepickerDue').datepicker({
-          autoclose: true,
-          format: 'yyyy-mm-dd'
-        });
-        //Date Out picker
-        $('#datepickerOut').datepicker({
-          autoclose: true,
-          format: 'yyyy-mm-dd'
-        });
-
         function printOrder()
         {
             toolOrderJs.printOrder(get('fonum'));
@@ -149,6 +165,10 @@
               return decodeURIComponent(name[1]);
            else
             return null;
+        }
+        function deleteOrder(){
+          toolOrderJs.deleteOrder(get('fonum'));
+          window.location = "/sheduler/index/";
         }
     </script>
 {% endblock extra_js %}

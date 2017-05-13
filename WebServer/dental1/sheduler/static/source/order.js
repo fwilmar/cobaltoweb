@@ -25,7 +25,7 @@ var toolOrderJs= {
             document.getElementById("inputCost").value == "" ||
             document.getElementById("inputDescription").value == ""
             ){
-                alert("Falta diligenciar  información de la sección")
+                alert("Falta diligenciar información de la sección")
         }
         else
         {
@@ -45,6 +45,9 @@ var toolOrderJs= {
             // alert("almacenando");
             toolOrderJs.requestPUT('/sheduler/orders/'+idOrder+'/',objectOrder);
         }
+    },
+    deleteOrder: function(idOrder){
+        toolOrderJs.requestDelete('/sheduler/orders/'+idOrder+'/');
     },
     updateOrder: function(idOrder){
         toolOrderJs.buildOrder('upadte',idOrder);
@@ -169,11 +172,27 @@ var toolOrderJs= {
                  dataType: "json",
                  processData: true,
                  success: function (data, status, jqXHR) {
-                    alert('Order saved');
+                    alert('Case saved');
                  },
                  error: function (xhr) {
                     console.log(xhr.responseText);
-                    alert("Order saved --- JSON");
+                    alert("Case saved --- JSON");
+                 }
+             });
+    },
+    requestDelete: function(urlRest) {
+            $.ajax({
+                 type: "DELETE",
+                 url: urlRest,
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 processData: true,
+                 success: function (data, status, jqXHR) {
+                    alert('Case Deleted');
+                 },
+                 error: function (xhr) {
+                    console.log(xhr.responseText);
+                    alert("Case Deleted --- JSON");
                  }
              });
     },
@@ -187,12 +206,12 @@ var toolOrderJs= {
                  processData: true,
                  success: function (data, status, jqXHR) {
                     console.log(data);
-                    alert('Order saved');
+                    alert('Case saved');
                     window.location = "/sheduler/index/";
                  },
                  error: function (xhr) {
                     console.log(xhr.responseText);
-                    alert("Order saved -- JSON");
+                    alert("Case saved -- JSON");
                  }
              });
     },
