@@ -13,6 +13,14 @@
 
 var toolDoctorJs= {
 	functionResponse: null,
+    loadDoctor: function(idDoctor){
+        toolDoctorJs.functionResponse = toolDoctorJs.responseDoctor;
+        toolDoctorJs.requestRest('/sheduler/doctors/'+idDoctor);
+    },
+    responseDoctor: function(data){
+        alert(data.name);
+        $('#inputDoctor').val(data.name);
+    },
 	loadDoctors: function(schedule){
         toolDoctorJs.functionResponse = toolDoctorJs.responseDoctors;
         toolDoctorJs.requestRest('/sheduler/doctors');
