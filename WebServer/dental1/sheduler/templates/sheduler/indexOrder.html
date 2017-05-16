@@ -122,7 +122,7 @@
             document.getElementById("month-title").innerHTML = monthNames[monthQuery-1]+"-"+yearQuery;
         }
         function priceFormatter(value) {
-        // 16777215 == ffffff in decimal
+
         return '<div >' +
                 '<i class="glyphicon glyphicon-usd"></i>' +
                 value+
@@ -147,7 +147,7 @@
         }
         function identifierFormatter(value, row, index) {
             return [
-                    '<a class="" href="/sheduler/editformorder?fonum='+row.id+'" title="formorder">',
+                    '<a class="" href="/sheduler/formorder?fonum='+row.id+'" title="formorder">',
                         value,
                     '</a>'].join('');
         }
