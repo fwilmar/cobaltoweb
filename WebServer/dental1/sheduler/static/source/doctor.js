@@ -13,36 +13,32 @@
 
 var toolDoctorJs= {
 	functionResponse: null,
-    loadDoctor: function(idDoctor){
-        toolDoctorJs.functionResponse = toolDoctorJs.responseDoctor;
-        toolDoctorJs.requestRest('/sheduler/doctors/'+idDoctor);
-    },
-    responseDoctor: function(data){
-        alert(data.name);
-        $('#inputDoctor').val(data.name);
-    },
-	loadDoctors: function(schedule){
+	loadDoctors: function(doctorSelected){
         toolDoctorJs.functionResponse = toolDoctorJs.responseDoctors;
-        toolDoctorJs.requestRest('/sheduler/doctors');
+        toolDoctorJs.requestRest('/sheduler/doctors', doctorSelected);
     },
-	responseDoctors: function(data){
+	responseDoctors: function(data, doctorSelected){
 		var options;
         for (var i = 0; i < data['length']; i++) {
             options += "<option value='"+data[i]['id']+"'>"+data[i]['name']+"</option>";
         }
         $('#listDoctors').append(options);
+        if(doctorSelected!=null)
+        {
+            $('#listDoctors').val(doctorSelected);
+        }
         $('#listDoctors').selectpicker('refresh');
     },
-	requestRest: function(urlRest) {
+	requestRest: function(urlRest, doctorSelected) {
         $.ajax({
             type: 'GET',
             dataType: 'json',
             url: urlRest,
             success: function(data) {
-                toolDoctorJs.functionResponse(data);
+                toolDoctorJs.functionResponse(data, doctorSelected);
             },
             error: function(xhr, ajaxOptions, thrownError) {
-                alert("Error en la respuesta JSON");
+                alert("Doctor - Error en la respuesta JSON");
             }
         });
     }

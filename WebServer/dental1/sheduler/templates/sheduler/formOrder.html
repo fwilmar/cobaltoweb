@@ -15,7 +15,16 @@
               <div class="box box-info">
                 <div class="box-header with-border">
                   <a class="btn btn-app pull-left" href="/sheduler/index">
-                    <i class="fa fa-inbox"></i>Orders
+                    <i class="fa fa-inbox"></i>Orders List
+                  </a>
+                  <a id="btn-print" class="btn btn-app pull-right">
+                    <i class="fa fa-print"></i>Print
+                  </a>
+                  <a id="btn-delete" class="btn btn-app pull-right" data-toggle="modal" data-target="#DeleteModal">
+                    <i class="fa fa-trash"></i>Delete
+                  </a>
+                  <a id="btn-save" class="btn btn-app pull-right" data-toggle="modal" data-target="#SaveModal">
+                    <i class="fa fa-check-circle"></i>Save
                   </a>
                 </div>
                 <!-- /.box-header -->
@@ -26,7 +35,7 @@
                     <div class="form-group">
                       <label for="inputCase" class="col-sm-2 control-label">Case</label>
                       <div class="col-sm-4">
-                        <input type="number" class="form-control" id="inputCase" placeholder="Case">
+                        <input type="number" class="form-control" id="inputCase" placeholder="Num Case">
                       </div>
                     </div>
                     <div class="form-group">
@@ -40,7 +49,6 @@
                           <select name='listProcedures[]' id="listProcedures" class='selectpicker show-tick form-control' data-live-search='true'>
                           </select>
                       </div>
-
                     </div>
                     <div class="form-group">
                       <label for="inputPatient" class="col-sm-2 control-label">Patient</label>
@@ -84,7 +92,6 @@
                   </div>
                   <!-- /.box-body " -->
                   <div class="box-footer">
-                    <button type="submit"  class="btn btn-info pull-left">Save Order</button>
                   </div>
                   <!-- /.box-footer -->
                 </form>
@@ -92,34 +99,69 @@
             </div>
         </div>
           <!-- /.row -->
+        <!-- Modal -->
+        <div class="modal fade " id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel">
+          <div class="modal-dialog modal-sm modal-danger" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="DeleteModalLabel">DELETE</h4>
+              </div>
+              <div class="modal-body">
+                 Delete Order?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline" onclick="return deleteOrder();">Delete Order</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade " id="SaveModal" tabindex="-1" role="dialog" aria-labelledby="SaveModalLabel">
+          <div class="modal-dialog modal-sm modal-primary" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="SaveModalLabel">SAVE</h4>
+              </div>
+              <div class="modal-body">
+                 Save Order?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline" onclick="return saveOrder();">Save Order</button>
+              </div>
+            </div>
+          </div>
+        </div>
     </section>
 {% endblock container %}
 {% block extra_js %}
     <script type="text/javascript">
         var typeform;
-        window.onload = function() {
-          onLoadFormOrder();
-        };
+         window.onload = function() {
+           onLoadEdtiOrder();
+           onLoadFormOrder();
+         };
         function onLoadFormOrder() {
-          toolDoctorJs.loadDoctors();
-          toolProcedureJs.loadProcedures();
+          toolDoctorJs.loadDoctors(null);
+          toolProcedureJs.loadProcedures(null);
           toolStationJs.loadStations();
-
 
           //Date In picker
           $('#datepickerIn').datepicker({
             autoclose: true,
-            format: 'yyyy-mm-dd'
+            format: 'mm-dd-yyyy'
           });
           //Date Due
           $('#datepickerDue').datepicker({
             autoclose: true,
-            format: 'yyyy-mm-dd'
+            format: 'mm-dd-yyyy'
           });
           //Date Out picker
           $('#datepickerOut').datepicker({
             autoclose: true,
-            format: 'yyyy-mm-dd'
+            format: 'mm-dd-yyyy'
           });
           $('#datepickerIn').datepicker('setDate', new Date());
 
@@ -130,22 +172,46 @@
             typeform = 'update';
             document.getElementById("btn-print").href = '/sheduler/printorder/?fonum='+get('fonum');
           }else{
-            typeform = 'save';
+            typeform = 'create';
           }
         }
 
         $('#form-order').submit(function(){
-            if(typeform=='save'){
-              toolOrderJs.saveOrder();
-              window.location = "/sheduler/index/";
+            if(typeform=='create'){
+              toolOrderJs.createOrder();
             }
-            else
+            else{
               toolOrderJs.updateOrder(get('fonum'));
+            }
+            window.location = "/sheduler/index/";
         });
-
+        function onLoadEdtiOrder() {
+          if(get('fonum')!=null)
+          {
+            toolOrderJs.loadOrder(get('fonum'));
+            document.getElementById("btn-print").href = '/sheduler/printorder/?fonum='+get('fonum');
+          }
+           else{
+             document.getElementById("btn-print").className += " disabled";
+             document.getElementById("btn-delete").className += " disabled";
+          }
+        }
         function printOrder()
         {
             toolOrderJs.printOrder(get('fonum'));
+        }
+        function deleteOrder(){
+          toolOrderJs.deleteOrder(get('fonum'));
+          window.location = "/sheduler/index/";
+        }
+        function saveOrder(){
+            if(typeform=='create'){
+              toolOrderJs.createOrder();
+            }
+            else{
+              toolOrderJs.updateOrder(get('fonum'));
+            }
+            window.location = "/sheduler/index/";
         }
         function get(name){
            if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search));

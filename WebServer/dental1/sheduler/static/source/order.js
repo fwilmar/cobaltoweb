@@ -1,17 +1,18 @@
 var toolOrderJs= {
 	functionResponseGet: null,
-    updateOrderEdit: function(idOrder){
 
+
+    updateOrderEdit: function(idOrder){
         var strDoctor = document.getElementById("inputDoctor").value;
         var strProcedure = document.getElementById("inputProcedure").value;
         var strStation = document.getElementById("inputStation").value;
-
-        var date_in_format = document.getElementById("datepickerIn").value+"T00:00:00-0700";
+        // var date_in_format = document.getElementById("datepickerIn").value+"T00:00:00-0700";
+        var aux_date_in_format = $("#datepickerIn").datepicker("getDate");
+        var date_in_format = $.datepickerIn.formatDate("dd-mm-yy", aux_date_in_format)
         var date_out_format = null;
         if($("#datepickerOut").datepicker("getDate") != "Invalid Date"){
             date_out_format =document.getElementById("datepickerOut").value+"T00:00:00-0700";
         }
-
         var due_date_format = null;
         if($("#datepickerDue").datepicker("getDate") != "Invalid Date"){
             due_date_format =document.getElementById("datepickerDue").value+"T00:00:00-0700";
@@ -52,8 +53,8 @@ var toolOrderJs= {
     updateOrder: function(idOrder){
         toolOrderJs.buildOrder('upadte',idOrder);
     },
-    saveOrder: function(){
-        toolOrderJs.buildOrder('save',0);
+    createOrder: function(){
+        toolOrderJs.buildOrder('create',0);
     },
     buildOrder: function(action, idOrder){
         var e = document.getElementById("listDoctors");
@@ -62,16 +63,25 @@ var toolOrderJs= {
         var strProcedure = e.options[e.selectedIndex].value;
         e = document.getElementById("listStations");
         var strStation = e.options[e.selectedIndex].value;
-        var date_in_format = document.getElementById("datepickerIn").value+"T00:00:00-0700";
+
+        var momentObj = moment($('#datepickerIn').val());
+        var date_in_format = momentObj.format();
+
+
+        var momentObj = moment($('#datepickerIn').val());
+        var date_in_format = momentObj.format();
+
         var date_out_format = null;
         console.log($("#datepickerOut").datepicker("getDate"));
         if($("#datepickerOut").datepicker("getDate") != "Invalid Date"){
-            date_out_format =document.getElementById("datepickerOut").value+"T00:00:00-0700";
+            var momentObj = moment($('#datepickerOut').val());
+            var date_out_format = momentObj.format();
         }
         var due_date_format = null;
         console.log($("#datepickerDue").datepicker("getDate"));
         if($("#datepickerDue").datepicker("getDate") != "Invalid Date"){
-            due_date_format =document.getElementById("datepickerDue").value+"T00:00:00-0700";
+            var momentObj = moment($('#datepickerDue').val());
+            var due_date_format = momentObj.format();
         }
         if(document.getElementById("inputCase").value == ""
             || strDoctor == null ||
@@ -93,9 +103,9 @@ var toolOrderJs= {
                 "station" : strStation,
                 "cost" : document.getElementById("inputCost").value
             }
-            // console.log(JSON.stringify(objectOrder));
-            // alert("almacenando");
-            if(action=="save"){
+             // console.log(JSON.stringify(objectOrder));
+             // alert("almacenando");
+            if(action=="create"){
                 toolOrderJs.requestPost("/sheduler/orders/",objectOrder);
             }else{
                 toolOrderJs.requestPUT('/sheduler/orders/'+idOrder+'/',objectOrder);
@@ -116,38 +126,23 @@ var toolOrderJs= {
         }
     },
     loadOrder: function(idOrder) {
-        toolOrderJs.functionResponseGet = toolOrderJs.responseOrder;
+        toolOrderJs.functionResponseGet = toolOrderJs.loadOrderInfo;
         toolOrderJs.requestRest('/sheduler/orders/'+idOrder);
     },
-    responseOrder: function(data){
+    loadOrderInfo: function(data){
 
-            // $('#listProcedures').val(data.procedure);
-            // $('#listProcedures').selectpicker('refresh');
-
-            // $('#listDoctors').val(data.doctor);
-            // $('#listDoctors').selectpicker('refresh');
-
-            // $('#listStations').val(data.station);
-            // $('#listStations').selectpicker('refresh');
-
-
-            $('#inputProcedure').val(data.procedure);
-            $('#inputDoctor').val(data.doctor);
-            $('#inputStation').val(data.station);
-
-
-            $('#inputPatient').val(data.patient);
-            $('#inputCase').val(data.case);
-            $('#inputDescription').val(data.description);
-
-            $('#datepickerIn').datepicker('setDate', new Date(data.date_in));
-
-            if(data.date_out!=null)
-                $('#datepickerOut').datepicker('setDate', new Date(data.date_out));
-            if(data.due_date!=null)
-                $('#datepickerDue').datepicker('setDate', new Date(data.due_date));
-
-            $('#inputCost').val(data.cost);
+        toolDoctorJs.loadDoctors(data.doctor);
+        toolProcedureJs.loadProcedures(data.procedure);
+        $('#inputStation').val(data.station);
+        $('#inputPatient').val(data.patient);
+        $('#inputCase').val(data.case);
+        $('#inputDescription').val(data.description);
+        $('#datepickerIn').datepicker('setDate', new Date(data.date_in));
+        if(data.date_out!=null)
+            $('#datepickerOut').datepicker('setDate', new Date(data.date_out));
+        if(data.due_date!=null)
+            $('#datepickerDue').datepicker('setDate', new Date(data.due_date));
+        $('#inputCost').val(data.cost);
 
     },
     requestRest: function(urlRest) {
@@ -159,7 +154,7 @@ var toolOrderJs= {
                 toolOrderJs.functionResponseGet(data);
             },
             error: function(xhr, ajaxOptions, thrownError) {
-                alert("Error en la respuesta JSON");
+                alert("Error GET");
             }
         });
     },
@@ -172,11 +167,11 @@ var toolOrderJs= {
                  dataType: "json",
                  processData: true,
                  success: function (data, status, jqXHR) {
-                    alert('Case saved');
+                    // alert('Order saved');
                  },
                  error: function (xhr) {
                     console.log(xhr.responseText);
-                    alert("Case saved --- JSON");
+                    // alert("Order saved --- JSON");
                  }
              });
     },
@@ -188,11 +183,11 @@ var toolOrderJs= {
                  dataType: "json",
                  processData: true,
                  success: function (data, status, jqXHR) {
-                    alert('Case Deleted');
+                    // alert('Order Deleted');
                  },
                  error: function (xhr) {
                     console.log(xhr.responseText);
-                    alert("Case Deleted --- JSON");
+                    // alert("Order Deleted --- JSON");
                  }
              });
     },
@@ -206,12 +201,11 @@ var toolOrderJs= {
                  processData: true,
                  success: function (data, status, jqXHR) {
                     console.log(data);
-                    alert('Case saved');
-                    window.location = "/sheduler/index/";
+                    // alert('Order saved');
                  },
                  error: function (xhr) {
                     console.log(xhr.responseText);
-                    alert("Case saved -- JSON");
+                    // alert("Order saved -- JSON");
                  }
              });
     },
