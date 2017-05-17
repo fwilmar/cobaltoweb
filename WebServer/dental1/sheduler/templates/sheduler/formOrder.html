@@ -11,19 +11,18 @@
         <div class="row">
             <div class="col-sm-12">
               <!-- Horizontal Form -->
-              <div class="schedule-master" id="containerSchedule"></div>
-              <div class="box box-info">
+              <div class="box box-success">
                 <div class="box-header with-border">
-                  <a class="btn btn-app pull-left" href="/sheduler/index">
+                  <a class="btn btn-app pull-left bg-blue" href="/sheduler/index">
                     <i class="fa fa-inbox"></i>Orders List
                   </a>
-                  <a id="btn-print" class="btn btn-app pull-right">
+                  <a id="btn-print" class="btn btn-app bg-teal pull-right">
                     <i class="fa fa-print"></i>Print
                   </a>
-                  <a id="btn-delete" class="btn btn-app pull-right" data-toggle="modal" data-target="#DeleteModal">
+                  <a id="btn-delete" class="btn btn-app bg-red pull-right" data-toggle="modal" data-target="#DeleteModal">
                     <i class="fa fa-trash"></i>Delete
                   </a>
-                  <a id="btn-save" class="btn btn-app pull-right" data-toggle="modal" data-target="#SaveModal">
+                  <a id="btn-save" class="btn btn-app bg-green pull-right" data-toggle="modal" data-target="#SaveModal">
                     <i class="fa fa-check-circle"></i>Save
                   </a>
                 </div>
@@ -111,14 +110,14 @@
                  Delete Order?
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-outline" onclick="return deleteOrder();">Delete Order</button>
               </div>
             </div>
           </div>
         </div>
         <div class="modal fade " id="SaveModal" tabindex="-1" role="dialog" aria-labelledby="SaveModalLabel">
-          <div class="modal-dialog modal-sm modal-primary" role="document">
+          <div class="modal-dialog modal-sm modal-success" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -128,7 +127,7 @@
                  Save Order?
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-outline" onclick="return saveOrder();">Save Order</button>
               </div>
             </div>
@@ -151,17 +150,17 @@
           //Date In picker
           $('#datepickerIn').datepicker({
             autoclose: true,
-            format: 'mm-dd-yyyy'
+            format: 'MM-dd-yyyy'
           });
           //Date Due
           $('#datepickerDue').datepicker({
             autoclose: true,
-            format: 'mm-dd-yyyy'
+            format: 'MM-dd-yyyy'
           });
           //Date Out picker
           $('#datepickerOut').datepicker({
             autoclose: true,
-            format: 'mm-dd-yyyy'
+            format: 'MM-dd-yyyy'
           });
           $('#datepickerIn').datepicker('setDate', new Date());
 

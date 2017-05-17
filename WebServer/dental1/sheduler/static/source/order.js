@@ -42,8 +42,8 @@ var toolOrderJs= {
                 "station" : strStation,
                 "cost" : document.getElementById("inputCost").value
             }
-            // console.log(JSON.stringify(objectOrder));
-            // alert("almacenando");
+            console.log(JSON.stringify(objectOrder));
+            alert("almacenando");
             toolOrderJs.requestPUT('/sheduler/orders/'+idOrder+'/',objectOrder);
         }
     },
@@ -105,6 +105,7 @@ var toolOrderJs= {
             }
              // console.log(JSON.stringify(objectOrder));
              // alert("almacenando");
+             // alert(JSON.stringify(objectOrder));
             if(action=="create"){
                 toolOrderJs.requestPost("/sheduler/orders/",objectOrder);
             }else{

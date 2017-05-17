@@ -50,6 +50,10 @@ def dashboardView(request):
 def formOrderView(request):
 	return render(request,'sheduler/formOrder.html')
 
+def formDoctorView(request):
+	return render(request,'sheduler/formDoctor.html')
+
+
 def editFormOrderView(request):
 	return render(request,'sheduler/editFormOrder.html')
 
