@@ -11,19 +11,18 @@
         <div class="row">
             <div class="col-sm-12">
               <!-- Horizontal Form -->
-              <div class="schedule-master" id="containerSchedule"></div>
-              <div class="box box-info">
+              <div class="box box-success">
                 <div class="box-header with-border">
-                  <a class="btn btn-app pull-left" href="/sheduler/index">
+                  <a class="btn btn-app pull-left bg-blue" href="/sheduler/index">
                     <i class="fa fa-inbox"></i>Orders List
                   </a>
-                  <a id="btn-print" class="btn btn-app pull-right">
+                  <a id="btn-print" class="btn btn-app bg-teal pull-right">
                     <i class="fa fa-print"></i>Print
                   </a>
-                  <a id="btn-delete" class="btn btn-app pull-right" data-toggle="modal" data-target="#DeleteModal">
+                  <a id="btn-delete" class="btn btn-app bg-red pull-right" data-toggle="modal" data-target="#DeleteModal">
                     <i class="fa fa-trash"></i>Delete
                   </a>
-                  <a id="btn-save" class="btn btn-app pull-right" data-toggle="modal" data-target="#SaveModal">
+                  <a id="btn-save" class="btn btn-app bg-green pull-right" data-toggle="modal" data-target="#SaveModal">
                     <i class="fa fa-check-circle"></i>Save
                   </a>
                 </div>
@@ -108,28 +107,45 @@
                 <h4 class="modal-title" id="DeleteModalLabel">DELETE</h4>
               </div>
               <div class="modal-body">
-                 Delete Order?
+                 Are You Sure?
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline" onclick="return deleteOrder();">Delete Order</button>
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline" onclick="return deleteOrder();">Yes, Delete it!!</button>
               </div>
             </div>
           </div>
         </div>
         <div class="modal fade " id="SaveModal" tabindex="-1" role="dialog" aria-labelledby="SaveModalLabel">
-          <div class="modal-dialog modal-sm modal-primary" role="document">
+          <div class="modal-dialog modal-sm modal-info" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="SaveModalLabel">SAVE</h4>
+                <h4 class="modal-title" id="SaveModalLabel">Confirmation</h4>
               </div>
               <div class="modal-body">
-                 Save Order?
+                 Do you want to save changes?
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline" onclick="return saveOrder();">Save Order</button>
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline" onclick="return saveOrder();">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade " id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel">
+          <div class="modal-dialog modal-sm modal-success" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="confirmModalLabel">Success</h4>
+              </div>
+              <div class="modal-body">
+                 Success !!
+              </div>
+              <div class="modal-footer">
+                  <a class="btn pull-left btn-outline" href="/sheduler/index">OK
+                  </a>
               </div>
             </div>
           </div>
@@ -138,6 +154,7 @@
 {% endblock container %}
 {% block extra_js %}
     <script type="text/javascript">
+
         var typeform;
          window.onload = function() {
            onLoadEdtiOrder();
@@ -151,24 +168,24 @@
           //Date In picker
           $('#datepickerIn').datepicker({
             autoclose: true,
-            format: 'mm-dd-yyyy'
+            format: 'MM-dd-yyyy'
           });
           //Date Due
           $('#datepickerDue').datepicker({
             autoclose: true,
-            format: 'mm-dd-yyyy'
+            format: 'MM-dd-yyyy'
           });
           //Date Out picker
           $('#datepickerOut').datepicker({
             autoclose: true,
-            format: 'mm-dd-yyyy'
+            format: 'MM-dd-yyyy'
           });
           $('#datepickerIn').datepicker('setDate', new Date());
 
 
           if(get('fonum')!=null)
           {
-            toolOrderJs.loadOrder(get('fonum'));
+            toolOrderJs.readOrder(get('fonum'));
             typeform = 'update';
             document.getElementById("btn-print").href = '/sheduler/printorder/?fonum='+get('fonum');
           }else{
@@ -188,7 +205,7 @@
         function onLoadEdtiOrder() {
           if(get('fonum')!=null)
           {
-            toolOrderJs.loadOrder(get('fonum'));
+            toolOrderJs.readOrder(get('fonum'));
             document.getElementById("btn-print").href = '/sheduler/printorder/?fonum='+get('fonum');
           }
            else{
@@ -202,7 +219,7 @@
         }
         function deleteOrder(){
           toolOrderJs.deleteOrder(get('fonum'));
-          window.location = "/sheduler/index/";
+          // window.location = "/sheduler/index/";
         }
         function saveOrder(){
             if(typeform=='create'){
@@ -211,7 +228,7 @@
             else{
               toolOrderJs.updateOrder(get('fonum'));
             }
-            window.location = "/sheduler/index/";
+            // window.location = "/sheduler/index/";
         }
         function get(name){
            if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search));

@@ -1,61 +1,27 @@
 var toolOrderJs= {
-	functionResponseGet: null,
+    functionResponseGet: null,
 
 
-    updateOrderEdit: function(idOrder){
-        var strDoctor = document.getElementById("inputDoctor").value;
-        var strProcedure = document.getElementById("inputProcedure").value;
-        var strStation = document.getElementById("inputStation").value;
-        // var date_in_format = document.getElementById("datepickerIn").value+"T00:00:00-0700";
-        var aux_date_in_format = $("#datepickerIn").datepicker("getDate");
-        var date_in_format = $.datepickerIn.formatDate("dd-mm-yy", aux_date_in_format)
-        var date_out_format = null;
-        if($("#datepickerOut").datepicker("getDate") != "Invalid Date"){
-            date_out_format =document.getElementById("datepickerOut").value+"T00:00:00-0700";
-        }
-        var due_date_format = null;
-        if($("#datepickerDue").datepicker("getDate") != "Invalid Date"){
-            due_date_format =document.getElementById("datepickerDue").value+"T00:00:00-0700";
-        }
-        if(
-            strDoctor == null ||
-            date_in_format == null ||
-            strProcedure == null ||
-            document.getElementById("inputCase").value == "" ||
-            document.getElementById("inputPatient").value == "" ||
-            document.getElementById("inputCost").value == "" ||
-            document.getElementById("inputDescription").value == ""
-            ){
-                alert("Falta diligenciar información de la sección")
-        }
-        else
-        {
-            var objectOrder = {
-                "case": document.getElementById("inputCase").value,
-                "patient": document.getElementById("inputPatient").value,
-                "description": document.getElementById("inputDescription").value,
-                "doctor": strDoctor,
-                "procedure": strProcedure,
-                "date_in" : date_in_format,
-                "due_date" : due_date_format,
-                "date_out" : date_out_format,
-                "station" : strStation,
-                "cost" : document.getElementById("inputCost").value
-            }
-            // console.log(JSON.stringify(objectOrder));
-            // alert("almacenando");
-            toolOrderJs.requestPUT('/sheduler/orders/'+idOrder+'/',objectOrder);
-        }
-    },
-    deleteOrder: function(idOrder){
-        toolOrderJs.requestDelete('/sheduler/orders/'+idOrder+'/');
-    },
-    updateOrder: function(idOrder){
-        toolOrderJs.buildOrder('upadte',idOrder);
-    },
     createOrder: function(){
+        toolOrderJs.functionResponseGet = toolOrderJs.createOrderInfo;
         toolOrderJs.buildOrder('create',0);
     },
+    readOrder: function(idOrder) {
+        toolOrderJs.functionResponseGet = toolOrderJs.readOrderInfo;
+        toolOrderJs.requestRest('/sheduler/orders/'+idOrder);
+    },
+    updateOrder: function(idOrder){
+        toolOrderJs.functionResponseGet = toolOrderJs.updateOrderInfo;
+        toolOrderJs.buildOrder('upadte',idOrder);
+    },
+    deleteOrder: function(idOrder){
+        toolOrderJs.functionResponseGet = toolOrderJs.deleteOrderInfo;
+        toolOrderJs.requestDelete('/sheduler/orders/'+idOrder+'/');
+    },
+
+
+
+
     buildOrder: function(action, idOrder){
         var e = document.getElementById("listDoctors");
         var strDoctor = e.options[e.selectedIndex].value;
@@ -105,6 +71,7 @@ var toolOrderJs= {
             }
              // console.log(JSON.stringify(objectOrder));
              // alert("almacenando");
+             // alert(JSON.stringify(objectOrder));
             if(action=="create"){
                 toolOrderJs.requestPost("/sheduler/orders/",objectOrder);
             }else{
@@ -125,12 +92,11 @@ var toolOrderJs= {
             toolOrderJs.requestPost("/sheduler/orders/printorder/");
         }
     },
-    loadOrder: function(idOrder) {
-        toolOrderJs.functionResponseGet = toolOrderJs.loadOrderInfo;
-        toolOrderJs.requestRest('/sheduler/orders/'+idOrder);
+    createOrderInfo: function(data){
+        $('#SaveModal').modal('hide');
+        $('#confirmModal').modal('show');
     },
-    loadOrderInfo: function(data){
-
+    readOrderInfo: function(data){
         toolDoctorJs.loadDoctors(data.doctor);
         toolProcedureJs.loadProcedures(data.procedure);
         $('#inputStation').val(data.station);
@@ -145,6 +111,19 @@ var toolOrderJs= {
         $('#inputCost').val(data.cost);
 
     },
+    updateOrderInfo: function(data){
+        $('#SaveModal').modal('hide');
+        $('#confirmModal').modal('show');
+    },
+    deleteOrderInfo: function(data){
+        $('#DeleteModal').modal('hide');
+        $('#confirmModal').modal('show');
+    },
+
+
+
+
+
     requestRest: function(urlRest) {
         $.ajax({
             type: 'GET',
@@ -152,6 +131,7 @@ var toolOrderJs= {
             url: urlRest,
             success: function(data) {
                 toolOrderJs.functionResponseGet(data);
+                console.log(status);
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert("Error GET");
@@ -159,19 +139,21 @@ var toolOrderJs= {
         });
     },
     requestPUT: function(urlRest, objectOrder) {
+             // alert(JSON.stringify(objectOrder));
             $.ajax({
                  type: "PUT",
                  url: urlRest,
                  data: JSON.stringify(objectOrder),
                  contentType: "application/json; charset=utf-8",
-                 dataType: "json",
+                 // dataType: "json",
                  processData: true,
                  success: function (data, status, jqXHR) {
-                    // alert('Order saved');
+                    toolOrderJs.functionResponseGet(data);
+                    console.log(status);
                  },
-                 error: function (xhr) {
-                    console.log(xhr.responseText);
-                    // alert("Order saved --- JSON");
+                 error: function (xhr, status, thrownError) {
+                    toolOrderJs.functionResponseGet(data);
+                    console.log(status);
                  }
              });
     },
@@ -183,11 +165,12 @@ var toolOrderJs= {
                  dataType: "json",
                  processData: true,
                  success: function (data, status, jqXHR) {
-                    // alert('Order Deleted');
+                    toolOrderJs.functionResponseGet(data);
+                    console.log(status);
                  },
                  error: function (xhr) {
-                    console.log(xhr.responseText);
-                    // alert("Order Deleted --- JSON");
+                    toolOrderJs.functionResponseGet(data);
+                    console.log(status);
                  }
              });
     },
@@ -197,15 +180,14 @@ var toolOrderJs= {
                  url: urlRest,
                  data: JSON.stringify(objectOrder),
                  contentType: "application/json; charset=utf-8",
-                 dataType: "json",
                  processData: true,
                  success: function (data, status, jqXHR) {
-                    console.log(data);
-                    // alert('Order saved');
+                    toolOrderJs.functionResponseGet(data);
+                    console.log(status);
                  },
-                 error: function (xhr) {
-                    console.log(xhr.responseText);
-                    // alert("Order saved -- JSON");
+                 error: function (xhr, status, thrownError) {
+                    toolOrderJs.functionResponseGet(data);
+                    console.log(status);
                  }
              });
     },
