@@ -107,28 +107,45 @@
                 <h4 class="modal-title" id="DeleteModalLabel">DELETE</h4>
               </div>
               <div class="modal-body">
-                 Delete Order?
+                 Are You Sure?
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline" onclick="return deleteOrder();">Delete Order</button>
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline" onclick="return deleteOrder();">Yes, Delete it!!</button>
               </div>
             </div>
           </div>
         </div>
         <div class="modal fade " id="SaveModal" tabindex="-1" role="dialog" aria-labelledby="SaveModalLabel">
+          <div class="modal-dialog modal-sm modal-info" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="SaveModalLabel">Confirmation</h4>
+              </div>
+              <div class="modal-body">
+                 Do you want to save changes?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline" onclick="return saveOrder();">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade " id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel">
           <div class="modal-dialog modal-sm modal-success" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="SaveModalLabel">SAVE</h4>
+                <h4 class="modal-title" id="confirmModalLabel">Success</h4>
               </div>
               <div class="modal-body">
-                 Save Order?
+                 Success !!
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline" onclick="return saveOrder();">Save Order</button>
+                  <a class="btn pull-left btn-outline" href="/sheduler/index">OK
+                  </a>
               </div>
             </div>
           </div>
@@ -137,6 +154,7 @@
 {% endblock container %}
 {% block extra_js %}
     <script type="text/javascript">
+
         var typeform;
          window.onload = function() {
            onLoadEdtiOrder();
@@ -167,7 +185,7 @@
 
           if(get('fonum')!=null)
           {
-            toolOrderJs.loadOrder(get('fonum'));
+            toolOrderJs.readOrder(get('fonum'));
             typeform = 'update';
             document.getElementById("btn-print").href = '/sheduler/printorder/?fonum='+get('fonum');
           }else{
@@ -187,7 +205,7 @@
         function onLoadEdtiOrder() {
           if(get('fonum')!=null)
           {
-            toolOrderJs.loadOrder(get('fonum'));
+            toolOrderJs.readOrder(get('fonum'));
             document.getElementById("btn-print").href = '/sheduler/printorder/?fonum='+get('fonum');
           }
            else{
@@ -201,7 +219,7 @@
         }
         function deleteOrder(){
           toolOrderJs.deleteOrder(get('fonum'));
-          window.location = "/sheduler/index/";
+          // window.location = "/sheduler/index/";
         }
         function saveOrder(){
             if(typeform=='create'){
@@ -210,7 +228,7 @@
             else{
               toolOrderJs.updateOrder(get('fonum'));
             }
-            window.location = "/sheduler/index/";
+            // window.location = "/sheduler/index/";
         }
         function get(name){
            if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search));
