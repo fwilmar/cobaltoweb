@@ -26,7 +26,7 @@
                 {% csrf_token %}
                   <div class="box-body">
                     <div class="start-template">
-                      <table id="tableOrder"
+                      <table id="tableDocotors"
                         data-toggle="table"
                         data-classes="table table-hover table-condensed table-responsive"
                         data-search="true"
@@ -34,14 +34,14 @@
                         data-sort-name="id"
                         data-sort-order="asc"
                         data-url="/sheduler/doctors/"
-                        data-show-footer="true"
-                        data-height=450>
-                          <thead>
+                        data-height=500
+                        data-pagination="true">
+<!--                           <thead>
                             <tr>
-                              <th data-field="id" data-sortable="true" data-formatter="identifierFormatter">Code</th>
-                              <th data-field="name" data-sortable="true">Name</th>
+                              <th data-align="center" data-field="id" data-sortable="true" data-formatter="identifierFormatter">Code</th>
+                              <th data-align="center" data-field="name" data-sortable="true" data-editable="true">Name</th>
                             </tr>
-                          </thead>
+                          </thead> -->
                        </table>
                     </div>
                   </div>
@@ -106,9 +106,46 @@
 {% block extra_js %}
     <script type="text/javascript">
 
+        var $table = $('#tableDocotors');
+        // $.fn.editable.defaults.mode = 'inline';
+        $.fn.editable.defaults.ajaxOptions = {type: "PUT"};
+        $.fn.editable.defaults.url = '/sheduler/doctor/';
+        $table.bootstrapTable({
+           columns: [
+                [
+                    {
+                        title: 'Code',
+                        field: 'id',
+                        // rowspan: 2,
+                        align: 'center',
+                        sortable: true
+                        // valign: 'middle'
+                    }, {
+                        title: 'Name',
+                        field: 'name',
+                        // rowspan: 2,
+                        align: 'center',
+                        // valign: 'middle',
+                        sortable: true,
+                        editable:  {
+                            type: 'text',
+                            title: 'Doctor Name',
+                            // url: '/sheduler/doctors/1/',
+                            params: function(params) {  //params already contain `name`, `value` and `pk`
+                              var data = {};
+                              data['id'] = params.pk;
+                              data[params.name] = params.value;
+                              return data;
+                            }
+                          }
+                    }
+                  ]
+              ]
+            });
+
         function identifierFormatter(value, row, index) {
             return [
-                    '<a class="" href="/sheduler/formdoctor?fonum='+row.id+'" title="formdoctor">',
+                    '<a class="editable data-editable" title="formdoctor">',
                         value,
                     '</a>'].join('');
         }

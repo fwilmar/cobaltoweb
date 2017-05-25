@@ -62,6 +62,17 @@ class DoctorViewSet(viewsets.ModelViewSet):
 	queryset = Doctor.objects.all()
 	serializer_class = DoctorSerializer
 
+class DoctorDetail(APIView):
+	  def put(self, request):
+	  	print request.data
+		doctor = Doctor.objects.filter(id=request.data.name)
+		serializer = DoctorSerializer(doctor)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+		else:
+			print "eroor"
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ProcedureViewSet(viewsets.ModelViewSet):
 	queryset = Procedure.objects.all()

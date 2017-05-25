@@ -25,7 +25,7 @@ SECRET_KEY = 'g%+j8gj%50k%q%_(&twk+14k^+18fnmjihoa61(__*+gs4e(+t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.35','localhost', '10.1.10.121', '10.1.10.120']
+ALLOWED_HOSTS = ['192.168.0.6','localhost', '10.1.10.121', '10.1.10.120']
 
 
 # Application definition
@@ -78,11 +78,11 @@ WSGI_APPLICATION = 'dental1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['DATABASE_NAME'],
-        'USER': os.environ['DATABASE_USER'],
-        'PASSWORD': os.environ['DATABASE_PASSW'],
-        'HOST': os.environ['DATABASE_HOST'],
-        'PORT': os.environ['DATABASE_PORT']
+        'NAME': 'dentalsoftdb',
+        'USER': 'dentalsoft',
+        'PASSWORD': 'dentalsoft',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 

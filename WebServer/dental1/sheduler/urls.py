@@ -20,6 +20,7 @@ urlpatterns =[
  	url(r'^editformorder/$', editFormOrderView),
  	url(r'^printorder/$', printOrder),
  	url(r'^dashboard/$', dashboardView),
+ 	url(r'^doctor/$', DoctorDetail.as_view()),
  ]
 
 
