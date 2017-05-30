@@ -12,9 +12,61 @@
 // });
 
 var toolDoctorJs= {
-	functionResponse: null,
+	functionResponseGet: null,
+
+    createDoctor: function(){
+        toolDoctorJs.functionResponseGet = toolDoctorJs.createDoctorInfo;
+        if(document.getElementById("inputNewDoctor").value == ""){
+            alert("Falta diligenciar  información de la sección")
+        } else {
+            var objectDoctor = {
+                "name": document.getElementById("inputNewDoctor").value,
+            }
+        }
+             // console.log(JSON.stringify(objectDoctor));
+             // alert("almacenando");
+             // alert(JSON.stringify(objectDoctor));
+        toolDoctorJs.requestPost("/sheduler/doctors/",objectDoctor);
+    },
+    readDoctor: function(idDoctor) {
+        toolDoctorJs.functionResponseGet = toolDoctorJs.readDoctorInfo;
+        toolDoctorJs.requestRest('/sheduler/doctors/'+idDoctor);
+    },
+    updateDoctor: function(idDoctor){
+        toolDoctorJs.functionResponseGet = toolDoctorJs.updateDoctorInfo;
+        if(document.getElementById("inputDoctorName").value == ""){
+            alert("Falta diligenciar  información de la sección")
+        } else {
+            var objectDoctor = {
+                "name": document.getElementById("inputDoctorName").value,
+            }
+        }
+        toolDoctorJs.requestPUT('/sheduler/doctors/'+idDoctor+'/',objectDoctor);
+    },
+    deleteDoctor: function(idDoctor){
+        toolDoctorJs.functionResponseGet = toolDoctorJs.deleteDoctorInfo;
+        toolDoctorJs.requestDelete('/sheduler/doctors/'+idDoctor+'/');
+    },
+
+    createDoctorInfo: function(data){
+        $('#SaveModal').modal('hide');
+        $('#confirmModal').modal('show');
+    },
+    readDoctorInfo: function(data){
+        $('#inputDoctorName').val(data.name);
+    },
+    updateDoctorInfo: function(data){
+        $('#SaveModal').modal('hide');
+        $('#confirmModal').modal('show');
+    },
+    deleteDoctorInfo: function(data){
+        $('#DeleteModal').modal('hide');
+        $('#confirmModal').modal('show');
+    },
+
+
 	loadDoctors: function(doctorSelected){
-        toolDoctorJs.functionResponse = toolDoctorJs.responseDoctors;
+        toolDoctorJs.functionResponseGet = toolDoctorJs.responseDoctors;
         toolDoctorJs.requestRest('/sheduler/doctors', doctorSelected);
     },
 	responseDoctors: function(data, doctorSelected){
@@ -35,11 +87,64 @@ var toolDoctorJs= {
             dataType: 'json',
             url: urlRest,
             success: function(data) {
-                toolDoctorJs.functionResponse(data, doctorSelected);
+                toolDoctorJs.functionResponseGet(data);
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert("Doctor - Error en la respuesta JSON");
             }
         });
+    },
+    requestPost: function(urlRest, objectDoctor) {
+            $.ajax({
+                 type: "POST",
+                 url: urlRest,
+                 data: JSON.stringify(objectDoctor),
+                 contentType: "application/json; charset=utf-8",
+                 processData: true,
+                 success: function (data, status, jqXHR) {
+                    toolDoctorJs.functionResponseGet(data);
+                    console.log(status);
+                 },
+                 error: function (xhr, status, thrownError) {
+                    toolDoctorJs.functionResponseGet(data);
+                    console.log(status);
+                 }
+             });
+    },
+    requestPUT: function(urlRest, objectDoctor) {
+             // alert(JSON.stringify(objectDoctor));
+            $.ajax({
+                 type: "PUT",
+                 url: urlRest,
+                 data: JSON.stringify(objectDoctor),
+                 contentType: "application/json; charset=utf-8",
+                 // dataType: "json",
+                 processData: true,
+                 success: function (data, status, jqXHR) {
+                    toolDoctorJs.functionResponseGet(data);
+                    console.log(status);
+                 },
+                 error: function (xhr, status, thrownError) {
+                    // toolDoctorJs.functionResponseGet(data);
+                    console.log(status);
+                 }
+             });
+    },
+    requestDelete: function(urlRest) {
+            $.ajax({
+                 type: "DELETE",
+                 url: urlRest,
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 processData: true,
+                 success: function (data, status, jqXHR) {
+                    toolDoctorJs.functionResponseGet(data);
+                    console.log(status);
+                 },
+                 error: function (xhr) {
+                    toolDoctorJs.functionResponseGet(data);
+                    console.log(status);
+                 }
+             });
     }
 }

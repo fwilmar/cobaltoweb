@@ -2,31 +2,30 @@
 {% extends "sheduler/starter.html" %}
 {% block content-header %}
       <h1>
+        <i class="fa fa-user-md"></i>
         Doctors
+        <small>Add, remove, edit doctors</small>
       </h1>
+
 {% endblock content-header %}
 {% block container %}
     <section class="content">
         <div class="row">
             <div class="col-sm-6">
               <!-- Horizontal Form -->
-              <div class="box box-info ">
+              <div class="box box-solid">
                 <!-- /.box-header -->
                 <div class="box-header with-border">
-                  <h3 class="box-title">Doctors List</h3>
-                  <a id="btn-delete" class="btn bg-red pull-right" data-toggle="modal" data-target="#DeleteModal">
-                    <i class="fa fa-trash"></i> Delete
-                  </a>
-                  <a id="btn-save" class="btn bg-green pull-right" data-toggle="modal" data-target="#AddModal">
-                    <i class="fa fa-plus"></i> Add
+                  <a id="btn-save" class="btn bg-aqua pull-right" href="/sheduler/formdoctor?numdoc=new">
+                    <i class="fa fa-plus"></i> New Doctor
                   </a>
                 </div>
                 <!-- form start -->
-                <form class="form-horizontal" id="form-order">
+                <form class="form-horizontal" id="form-doctor">
                 {% csrf_token %}
                   <div class="box-body">
                     <div class="start-template">
-                      <table id="tableOrder"
+                      <table id="tableDoctor"
                         data-toggle="table"
                         data-classes="table table-hover table-condensed table-responsive"
                         data-search="true"
@@ -38,8 +37,8 @@
                         data-height=450>
                           <thead>
                             <tr>
-                              <th data-field="id" data-sortable="true" data-formatter="identifierFormatter">Code</th>
-                              <th data-field="name" data-sortable="true">Name</th>
+                              <th data-field="id" data-sortable="true" data-formatter="identifierFormatter" data-align="center">Code</th>
+                              <th data-field="name" data-sortable="true" data-align="center">Name</th>
                             </tr>
                           </thead>
                        </table>
@@ -53,9 +52,13 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="box box-info">
+              <div class="box box-success box-solid" id="EditDoctor">
                 <div class="box-header with-border">
-                  <h3 class="box-title">Add Doctor</h3>
+                  <h3 class="box-title text-white">Edit Doctor</h3>
+                  <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                  </div>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
@@ -63,9 +66,9 @@
                 {% csrf_token %}
                   <div class="box-body">
                     <div class="form-group">
-                      <label for="inputPatient" class="col-sm-3 control-label">Doctor Name</label>
+                      <label for="inputDoctorName" class="col-sm-3 control-label text-green">Doctor Name</label>
                       <div class="col-sm-6">
-                            <input id="inputPatient" type="text" class="form-control" placeholder="Doctor Name">
+                            <input id="inputDoctorName" type="text" class="form-control" placeholder="Doctor Name">
                       </div>
                     </div>
                   </div>
@@ -75,28 +78,90 @@
                       <i class="fa fa-trash"></i>Delete
                     </a>
                     <a id="btn-save" class="btn btn-app bg-green pull-right" data-toggle="modal" data-target="#SaveModal">
-                      <i class="fa fa-check-circle"></i>Add
+                      <i class="fa fa-check-circle"></i>Save
                     </a>
                   </div>
                   <!-- /.box-footer -->
                 </form>
               </div>
+              <div class="box box-info box-solid" id="AddDoctor">
+                <div class="box-header with-border">
+                  <h1 class="box-title text-white">Add New Doctor</h1>
+                  <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label for="inputNewDoctor" class="col-sm-3 control-label text-aqua">Doctor Name</label>
+                      <div class="col-sm-6">
+                            <input id="inputNewDoctor" type="text" class="form-control" placeholder="Doctor Name">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /.box-body " -->
+                  <div class="box-footer">
+                    <a id="btn-delete" class="btn btn-app bg-red pull-right" href="/sheduler/formdoctor/">
+                      <i class="fa fa-close"></i>Cancel
+                    </a>
+                    <a id="btn-save" class="btn btn-app bg-aqua pull-right" data-toggle="modal" data-target="#SaveModal">
+                      <i class="fa fa-check-circle"></i>Create
+                    </a>
+                  </div>
+                  <!-- /.box-footer -->
+              </div>
             </div>
         </div>
           <!-- /.row -->
-        <div class="modal fade " id="AddModal" tabindex="-1" role="dialog" aria-labelledby="AddModal">
-          <div class="modal-dialog modal-sm " role="document">
+        <div class="modal fade " id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel">
+          <div class="modal-dialog modal-sm modal-danger" role="document">
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="AddModal">Doctor</h4>
+                <h4 class="modal-title" id="DeleteModalLabel">DELETE</h4>
               </div>
               <div class="modal-body">
-                 Delete Order?
+                 Are You Sure?
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-outline" onclick="return deleteOrder();">Delete Order</button>
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline" onclick="return deleteDoctor();">Yes, Delete it!!</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade " id="SaveModal" tabindex="-1" role="dialog" aria-labelledby="SaveModalLabel">
+          <div class="modal-dialog modal-sm modal-info" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="SaveModalLabel">Confirmation</h4>
+              </div>
+              <div class="modal-body">
+                 Do you want to save changes?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline" onclick="return saveDoctor();">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade " id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel">
+          <div class="modal-dialog modal-sm modal-success" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="confirmModalLabel">Success</h4>
+              </div>
+              <div class="modal-body">
+                 Success !!
+              </div>
+              <div class="modal-footer">
+                  <a class="btn pull-left btn-outline" href="/sheduler/formdoctor">OK
+                  </a>
               </div>
             </div>
           </div>
@@ -105,12 +170,53 @@
 {% endblock container %}
 {% block extra_js %}
     <script type="text/javascript">
+          var typeform;
+          window.onload = function() {
+            if(get('numdoc')!=null)
+            {
+              if(get('numdoc')=="new"){
+                $('#AddDoctor').show();
+                $('#EditDoctor').hide();
+                typeform = 'create';
+              }else{
+                $('#AddDoctor').hide();
+                $('#EditDoctor').show();
+                toolDoctorJs.readDoctor(get('numdoc'));
+                typeform = 'update';
+              }
+            }else{
+                $('#AddDoctor').hide();
+                $('#EditDoctor').hide();
+            }
+        }
+
+        function deleteDoctor(){
+          toolDoctorJs.deleteDoctor(get('numdoc'));
+          // window.location = "/sheduler/index/";
+        }
+        function saveDoctor(){
+            if(typeform=='create'){
+              toolDoctorJs.createDoctor();
+            }
+            else{
+              toolDoctorJs.updateDoctor(get('numdoc'));
+            }
+            // window.location = "/sheduler/index/";
+        }
 
         function identifierFormatter(value, row, index) {
             return [
-                    '<a class="" href="/sheduler/formdoctor?fonum='+row.id+'" title="formdoctor">',
+                    '<a class="" href="/sheduler/formdoctor?numdoc='+row.id+'" title="formdoctor">',
                         value,
                     '</a>'].join('');
+        }
+
+        function get(name){
+           if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search));
+           if(name != null)
+              return decodeURIComponent(name[1]);
+           else
+            return null;
         }
     </script>
 {% endblock extra_js %}

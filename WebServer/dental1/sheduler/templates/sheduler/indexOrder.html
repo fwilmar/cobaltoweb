@@ -3,11 +3,11 @@
 {% block content-header %}
       <h1>
         Orders Management
-        <small>Add, remove, edit Orders</small>
+        <small>Add, remove, edit orders</small>
       </h1>
 {% endblock content-header %}
 {% block container %}
-<section class="content">
+    <section class="content">
       <div class="row">
         <div class="col-md-12">
           <div class="box box-primary">
@@ -54,7 +54,8 @@
                     data-url="/sheduler/orders/order_month"
                     data-show-footer="true"
                     data-height=450
-                    data-show-export="true">
+                    data-show-export="true"
+                    data-pagination="true">
                       <thead>
                         <tr>
                           <th data-field="case" data-sortable="true" data-formatter="identifierFormatter">Case</th>
