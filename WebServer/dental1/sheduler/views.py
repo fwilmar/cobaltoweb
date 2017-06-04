@@ -102,7 +102,7 @@ def printInvoiceMontlhy(request):
 	year = request.query_params.get('year', None)
 	month = request.query_params.get('month', None)
 	if (year != None and month != None ):
-		order_month = Order.objects.filter(date_in__year=year, date_in__month=month)
+		order_month = Order.objects.filter(date_in__year=year, date_in__month=month).order_by('case')
 	elif year != None:
 		order_month = Order.objects.filter(date_in__year=year)
 	else :
