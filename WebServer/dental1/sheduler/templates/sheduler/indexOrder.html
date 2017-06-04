@@ -18,7 +18,7 @@
                     </a>
                 </div>
                 <div>
-                    <a class="btn btn-app pull-left bg-teal" onclick="getACurrentMonth()">
+                    <a class="btn btn-app pull-left bg-olive" onclick="getACurrentMonth()">
                         <i class="fa fa-history"></i>Current
                     </a>
                 </div>
@@ -31,6 +31,11 @@
                     <a class="btn btn-app pull-right bg-blue" href="/sheduler/formorder">
                         <i class="fa fa-plus-square"></i>New Order
                     </a>
+                </div>
+                <div>
+                  <a id="btn-print" class="btn btn-app bg-blue pull-right">
+                    <i class="fa fa-print"></i>Print
+                  </a>
                 </div>
             </div>
             <!-- /.box-body -->
@@ -111,6 +116,7 @@
         }
         function refreshTableOrder(){
             getMonthName();
+            document.getElementById("btn-print").href = '/sheduler/printinvoicemontlhy/?year='+yearQuery+'&month='+monthQuery;
             $table.bootstrapTable('refreshOptions', {url: '/sheduler/orders/order_month?year='+yearQuery+'&month='+monthQuery});
         }
         function getACurrentMonth(){

@@ -19,6 +19,7 @@ urlpatterns =[
  	url(r'^formdoctor/$', formDoctorView),
  	url(r'^editformorder/$', editFormOrderView),
  	url(r'^printorder/$', printOrder),
+ 	url(r'^printinvoicemontlhy/$', printInvoiceMontlhy),
  	url(r'^dashboard/$', dashboardView),
  ]
 
