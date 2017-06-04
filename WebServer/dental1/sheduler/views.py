@@ -22,24 +22,24 @@ from rest_framework.views import APIView
 from .models import Order, Doctor, Procedure, LabStation
 from .forms import OrderForm
 from .serializers import DoctorSerializer,OrderSerializer,OrderSerializerList,ProcedureSerializer,OrderSerializerPost, LabStationSerializer
+from .printer import createPDF
+
 
 from django.template import loader
 from django.template import RequestContext
-
-import cStringIO
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.pagesizes import landscape
 from reportlab.platypus import Image
 from reportlab.lib.units import inch
-from wsgiref.util import FileWrapper
-import csv
+
+import cStringIO
 
 import time
 from datetime import date
 
-from printer import createPDF
+
 
 def indexSheduler(request):
 	return render(request,'sheduler/indexOrder.html')
@@ -94,6 +94,27 @@ class OrderViewSet(viewsets.ModelViewSet):
 			serializer = OrderSerializerList(order_month, many=True)
 			data = serializer.data[:]
 			return Response(data)
+
+
+@api_view(['GET', 'POST', 'DELETE'])
+def printInvoiceMontlhy(request):
+	today = date.today()
+	year = request.query_params.get('year', None)
+	month = request.query_params.get('month', None)
+	if (year != None and month != None ):
+		order_month = Order.objects.filter(date_in__year=year, date_in__month=month)
+	elif year != None:
+		order_month = Order.objects.filter(date_in__year=year)
+	else :
+		order_month = Order.objects.filter(date_in__year=datetime.now().year, date_in__month=datetime.now().month)
+
+	response = HttpResponse(content_type='application/pdf')
+	response['Content-Disposition'] = 'attachment; filename="%s"' % "TexasDentalLab"+order_month[1].date_in.strftime('%B')+"-Invoice.pdf"
+	printer = createPDF()
+	printer.generate_statement(order_month, response)
+	return response
+
+
 
 @api_view(['GET', 'POST', 'DELETE'])
 def printOrder(request):
@@ -245,3 +266,5 @@ def generate_certificate(order ,canvas):
 
 	canvas.showPage()
 	canvas.save()
+
+
