@@ -231,14 +231,15 @@ def invoice_header(c, month):
 	today = date.today()
 
 	c.setFont('Helvetica-Bold', 16)
-	c.drawString(150,755,'Laboratory Department')
+	c.drawString(50,755,'German Dental Lab')
+	c.setFont('Helvetica-Bold', 14)
+	c.drawString(50,735,'Ship to: ')
 	c.setFont('Helvetica', 14)
-	c.drawString(150,735,'Invoice: '+month)
+	c.drawString(110,735,'Texas Dental Services Lab')
+	c.setFont('Helvetica', 14)
+	c.drawString(370,755,'Statement - '+month)
 	c.setFont('Helvetica', 8)
 	c.drawString(450,735,'Printed: '+today.strftime('%m/%d/%Y'))
 
-	image_width_logo=1.4*inch
-	image_height_logo=0.7*inch
-	logo1 = 'sheduler/static/img/Logo1-country.jpeg'
-	c.drawImage(logo1, 30, 725, width=image_width_logo, height=image_height_logo)
+
 	return c
