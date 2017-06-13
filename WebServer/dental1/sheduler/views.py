@@ -104,9 +104,9 @@ def printInvoiceMontlhy(request):
 	if (year != None and month != None ):
 		order_month = Order.objects.filter(date_in__year=year, date_in__month=month).order_by('case')
 	elif year != None:
-		order_month = Order.objects.filter(date_in__year=year)
+		order_month = Order.objects.filter(date_in__year=year).order_by('case')
 	else :
-		order_month = Order.objects.filter(date_in__year=datetime.now().year, date_in__month=datetime.now().month)
+		order_month = Order.objects.filter(date_in__year=datetime.now().year, date_in__month=datetime.now().month).order_by('case')
 
 	response = HttpResponse(content_type='application/pdf')
 	response['Content-Disposition'] = 'attachment; filename="%s"' % "TexasDentalLab"+order_month[1].date_in.strftime('%B')+"-Invoice.pdf"
