@@ -53,6 +53,9 @@ def formOrderView(request):
 def formDoctorView(request):
 	return render(request,'sheduler/formDoctor.html')
 
+def formProcedureView(request):
+	return render(request,'sheduler/formProcedure.html')
+
 
 def editFormOrderView(request):
 	return render(request,'sheduler/editFormOrder.html')
