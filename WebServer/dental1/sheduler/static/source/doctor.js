@@ -52,7 +52,7 @@ var toolDoctorJs= {
         $('#SaveModal').modal('hide');
         $('#confirmModal').modal('show');
     },
-    readDoctorInfo: function(data){
+    readDoctorInfo: function(data, doctorSelected){
         $('#inputDoctorName').val(data.name);
     },
     updateDoctorInfo: function(data){
@@ -87,7 +87,7 @@ var toolDoctorJs= {
             dataType: 'json',
             url: urlRest,
             success: function(data) {
-                toolDoctorJs.functionResponseGet(data);
+                toolDoctorJs.functionResponseGet(data, doctorSelected);
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 alert("Doctor - Error en la respuesta JSON");
