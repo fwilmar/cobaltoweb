@@ -1,0 +1,222 @@
+
+{% extends "sheduler/starter.html" %}
+{% block content-header %}
+      <h1>
+        <i class="fa fa-medkit"></i>
+        Procedures
+        <small>Add, remove, edit Procedures</small>
+      </h1>
+
+{% endblock content-header %}
+{% block container %}
+    <section class="content">
+        <div class="row">
+            <div class="col-sm-6">
+              <!-- Horizontal Form -->
+              <div class="box box-solid">
+                <!-- /.box-header -->
+                <div class="box-header with-border">
+                  <a id="btn-save" class="btn bg-aqua pull-right" href="/sheduler/formprocedure?numdoc=new">
+                    <i class="fa fa-plus"></i> New Procedure
+                  </a>
+                </div>
+                <!-- form start -->
+                <form class="form-horizontal" id="form-procedure">
+                {% csrf_token %}
+                  <div class="box-body">
+                    <div class="start-template">
+                      <table id="tableProcedure"
+                        data-toggle="table"
+                        data-classes="table table-hover table-condensed table-responsive"
+                        data-search="true"
+                        data-show-refresh="true"
+                        data-sort-name="id"
+                        data-sort-order="asc"
+                        data-url="/sheduler/procedures/"
+                        data-show-footer="true"
+                        data-height=450>
+                          <thead>
+                            <tr>
+                              <th data-field="id" data-sortable="true" data-formatter="identifierFormatter" data-align="center">Code</th>
+                              <th data-field="name" data-sortable="true" data-align="center">Name</th>
+                            </tr>
+                          </thead>
+                       </table>
+                    </div>
+                  </div>
+                  <!-- /.box-body " -->
+                  <div class="box-footer">
+                  </div>
+                  <!-- /.box-footer -->
+                </form>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="box box-success box-solid" id="EditProcedure">
+                <div class="box-header with-border">
+                  <h3 class="box-title text-white">Edit Procedure</h3>
+                  <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" id="form-order">
+                {% csrf_token %}
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label for="inputProcedureName" class="col-sm-3 control-label text-green">Procedure Name</label>
+                      <div class="col-sm-6">
+                            <input id="inputProcedureName" type="text" class="form-control" placeholder="Procedure Name">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /.box-body " -->
+                  <div class="box-footer">
+                    <a id="btn-delete" class="btn btn-app bg-red pull-right" data-toggle="modal" data-target="#DeleteModal">
+                      <i class="fa fa-trash"></i>Delete
+                    </a>
+                    <a id="btn-save" class="btn btn-app bg-green pull-right" data-toggle="modal" data-target="#SaveModal">
+                      <i class="fa fa-check-circle"></i>Save
+                    </a>
+                  </div>
+                  <!-- /.box-footer -->
+                </form>
+              </div>
+              <div class="box box-info box-solid" id="AddProcedure">
+                <div class="box-header with-border">
+                  <h1 class="box-title text-white">Add New Procedure</h1>
+                  <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                  <div class="box-body">
+                    <div class="form-group">
+                      <label for="inputNewProcedure" class="col-sm-3 control-label text-aqua">Procedure Name</label>
+                      <div class="col-sm-6">
+                            <input id="inputNewProcedure" type="text" class="form-control" placeholder="Procedure Name">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- /.box-body " -->
+                  <div class="box-footer">
+                    <a id="btn-delete" class="btn btn-app bg-red pull-right" href="/sheduler/formprocedure/">
+                      <i class="fa fa-close"></i>Cancel
+                    </a>
+                    <a id="btn-save" class="btn btn-app bg-aqua pull-right" data-toggle="modal" data-target="#SaveModal">
+                      <i class="fa fa-check-circle"></i>Create
+                    </a>
+                  </div>
+                  <!-- /.box-footer -->
+              </div>
+            </div>
+        </div>
+          <!-- /.row -->
+        <div class="modal fade " id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel">
+          <div class="modal-dialog modal-sm modal-danger" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="DeleteModalLabel">DELETE</h4>
+              </div>
+              <div class="modal-body">
+                 Are You Sure?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline" onclick="return deleteProcedure();">Yes, Delete it!!</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade " id="SaveModal" tabindex="-1" role="dialog" aria-labelledby="SaveModalLabel">
+          <div class="modal-dialog modal-sm modal-info" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="SaveModalLabel">Confirmation</h4>
+              </div>
+              <div class="modal-body">
+                 Do you want to save changes?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline" onclick="return saveProcedure();">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade " id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel">
+          <div class="modal-dialog modal-sm modal-success" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="confirmModalLabel">Success</h4>
+              </div>
+              <div class="modal-body">
+                 Success !!
+              </div>
+              <div class="modal-footer">
+                  <a class="btn pull-left btn-outline" href="/sheduler/formprocedure">OK
+                  </a>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+{% endblock container %}
+{% block extra_js %}
+    <script type="text/javascript">
+          var typeform;
+          window.onload = function() {
+            if(get('numproc')!=null)
+            {
+              if(get('numproc')=="new"){
+                $('#AddProcedure').show();
+                $('#EditProcedure').hide();
+                typeform = 'create';
+              }else{
+                $('#AddProcedure').hide();
+                $('#EditProcedure').show();
+                toolProcedureJs.readProcedure(get('numproc'));
+                typeform = 'update';
+              }
+            }else{
+                $('#AddProcedure').hide();
+                $('#EditProcedure').hide();
+            }
+        }
+
+        function deleteProcedure(){
+          toolProcedureJs.deleteProcedure(get('numproc'));
+          // window.location = "/sheduler/index/";
+        }
+        function saveProcedure(){
+            if(typeform=='create'){
+              toolProcedureJs.createProcedure();
+            }
+            else{
+              toolProcedureJs.updateProcedure(get('numproc'));
+            }
+            // window.location = "/sheduler/index/";
+        }
+
+        function identifierFormatter(value, row, index) {
+            return [
+                    '<a class="" href="/sheduler/formprocedure?numproc='+row.id+'" title="formprocedure">',
+                        value,
+                    '</a>'].join('');
+        }
+
+        function get(name){
+           if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search));
+           if(name != null)
+              return decodeURIComponent(name[1]);
+           else
+            return null;
+        }
+    </script>
+{% endblock extra_js %}
