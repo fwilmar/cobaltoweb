@@ -1,0 +1,195 @@
+
+{% extends "sheduler/starter.html" %}
+{% block content-header %}
+      <h1>
+        Calendar
+        <small>Control panel</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Calendar</li>
+      </ol>
+{% endblock content-header %}
+{% block container %}
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <!-- /.col -->
+        <div class="col-md-12">
+          <div class="box box-primary">
+            <div class="box-body no-padding">
+              <!-- THE CALENDAR -->
+              <div id="calendar"></div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /. box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+
+<!-- AdminLTE for demo purposes -->
+<!-- <script src="../dist/js/demo.js"></script> -->
+
+{% endblock container %}
+{% block extra_js %}
+
+<!-- jQuery UI 1.11.4 -->
+<!-- INCOMPATIBLE CON DATEPICKER DE JQUERY 3.2-->
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+<!-- Page specific script -->
+<script type="text/javascript">
+
+    /* initialize the external events
+     -----------------------------------------------------------------*/
+    function ini_events(ele) {
+      ele.each(function () {
+
+        // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+        // it doesn't need to have a start or end
+        var eventObject = {
+          title: $.trim($(this).text()) // use the element's text as the event title
+        };
+
+        // store the Event Object in the DOM element so we can get to it later
+        $(this).data('eventObject', eventObject);
+
+        // make the event draggable using jQuery UI
+        $(this).draggable({
+          zIndex: 1070,
+          revert: true, // will cause the event to go back to its
+          revertDuration: 0  //  original position after the drag
+        });
+
+      });
+    }
+
+    ini_events($('#external-events div.external-event'));
+
+    /* initialize the calendar
+     -----------------------------------------------------------------*/
+    //Date for the calendar events (dummy data)
+    var date = new Date();
+    var d = date.getDate(),
+        m = date.getMonth(),
+        y = date.getFullYear();
+
+
+
+    $('#calendar').fullCalendar({
+      height: 550,
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay'
+      },
+      buttonText: {
+        today: 'today',
+        month: 'month',
+        week: 'week',
+        day: 'day'
+      },
+      events: function(start, end, timezone, callback) {
+        $.ajax({
+            url: '/sheduler/orders/',
+            dataType: 'json',
+            data: {
+                // our hypothetical feed requires UNIX timestamps
+            },
+            success: function(doc) {
+                var events = [];
+                $.each(doc, function(i, v){
+                  switch(v.priority){
+                    case 1:
+                      eventColor = "#f56954";
+                      break;
+                    case 2:
+                      eventColor = "#f39c12";
+                      break;
+                    case 3:
+                      eventColor = "#00a65a";
+                      break;
+                    default:
+                      eventColor = "#00a65a";
+                  }
+                  if(v.due_date != null){
+                    events.push({
+                        title: v.case+'  '+v.patient,
+                        start: v.due_date,
+                        url: '/sheduler/formorder/?fonum='+v.id,
+                        allDay : true,
+                        backgroundColor: eventColor,
+                        borderColor: eventColor
+                    });
+                  }
+                });
+                callback(events);
+            }
+        });
+     },
+      editable: false,
+      droppable: false, // this allows things to be dropped onto the calendar !!!
+      drop: function (date, allDay) { // this function is called when something is dropped
+
+        // retrieve the dropped element's stored Event Object
+        var originalEventObject = $(this).data('eventObject');
+
+        // we need to copy it, so that multiple events don't have a reference to the same object
+        var copiedEventObject = $.extend({}, originalEventObject);
+
+        // assign it the date that was reported
+        copiedEventObject.start = date;
+        copiedEventObject.allDay = allDay;
+        copiedEventObject.backgroundColor = $(this).css("background-color");
+        copiedEventObject.borderColor = $(this).css("border-color");
+
+        // render the event on the calendar
+        // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+        $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+
+        // is the "remove after drop" checkbox checked?
+        if ($('#drop-remove').is(':checked')) {
+          // if so, remove the element from the "Draggable Events" list
+          $(this).remove();
+        }
+
+      }
+    });
+
+    /* ADDING EVENTS */
+    var currColor = "#3c8dbc"; //Red by default
+    //Color chooser button
+    var colorChooser = $("#color-chooser-btn");
+    $("#color-chooser > li > a").click(function (e) {
+      e.preventDefault();
+      //Save color
+      currColor = $(this).css("color");
+      //Add color effect to button
+      $('#add-new-event').css({"background-color": currColor, "border-color": currColor});
+    });
+    $("#add-new-event").click(function (e) {
+      e.preventDefault();
+      //Get value and make sure it is not null
+      var val = $("#new-event").val();
+      if (val.length == 0) {
+        return;
+      }
+
+      //Create events
+      var event = $("<div />");
+      event.css({"background-color": currColor, "border-color": currColor, "color": "#fff"}).addClass("external-event");
+      event.html(val);
+      $('#external-events').prepend(event);
+
+      //Add draggable funtionality
+      ini_events(event);
+
+      //Remove event from text input
+      $("#new-event").val("");
+    });
+
+</script>
+{% endblock extra_js %}

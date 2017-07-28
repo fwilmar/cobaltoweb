@@ -44,6 +44,9 @@ from datetime import date
 def indexSheduler(request):
 	return render(request,'sheduler/indexOrder.html')
 
+def calendarView(request):
+	return render(request,'sheduler/calendar.html')
+
 def dashboardView(request):
 	return render(request,'sheduler/starter.html')
 

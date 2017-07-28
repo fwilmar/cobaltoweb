@@ -32,8 +32,8 @@ class Order(models.Model):
 	due_date = models.DateTimeField('order due date',null=True)
 	cost = models.IntegerField(blank=True,null=True)
 	station = models.ForeignKey(LabStation,null=True)
-	# def __unicode__(self):
-	# 	return '%d: %s' % (self.case, self.patient)
+	priority = models.IntegerField(blank=True,null=True)
+
 
 class Printed(models.Model):
 	NEW_STATUS = 1
