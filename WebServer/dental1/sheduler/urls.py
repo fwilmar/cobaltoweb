@@ -17,6 +17,7 @@ urlpatterns =[
  	url(r'^index/$', indexSheduler),
  	url(r'^formorder/$', formOrderView),
  	url(r'^formdoctor/$', formDoctorView),
+ 	url(r'^calendar/$', calendarView),
  	url(r'^formprocedure/$', formProcedureView),
  	url(r'^editformorder/$', editFormOrderView),
  	url(r'^printorder/$', printOrder),

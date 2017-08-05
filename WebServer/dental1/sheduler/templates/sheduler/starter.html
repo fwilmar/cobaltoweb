@@ -46,6 +46,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- Bootstrap table -->
   <link rel="stylesheet" href="{% static 'css/daterangepicker.css' %}"/>
+  <!-- fullCalendar 2.2.5-->
+  <link rel="stylesheet" href="{% static 'css/fullcalendar.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/fullcalendar.print.css' %}" media="print">
+
 
   <!--****************************************
   END USER LIBRARY -  bootstrap-table
@@ -196,6 +200,7 @@ desired effect
         <li ><a href="/sheduler/index"><i class="fa fa-inbox"></i><span>Orders</span></a></li>
         <li ><a href="/sheduler/formdoctor"><i class="fa fa-user-md"></i> <span>Doctors</span></a></li>
         <li ><a href="/sheduler/formprocedure"><i class="fa fa-medkit"></i> <span>Procedures</span></a></li>
+        <li ><a href="/sheduler/calendar"><i class="fa fa-calendar-check-o"></i> <span>Calendar</span></a></li>
 <!--         <li class="treeview">
           <a href="#">
             <i class="fa fa-wrench"></i> <span>Admin</span>
@@ -349,8 +354,12 @@ desired effect
 <script src="{% static 'js/moment.min.js' %}"></script>
 <!-- daterangepicker -->
 <script src="{% static 'js/daterangepicker.js' %}"></script>
-
-
+<!-- Slimscroll -->
+<script src="{% static 'js/jquery.slimscroll.min.js' %}"></script>
+<!-- FastClick -->
+<script src="{% static 'js/fastclick.min.js' %}"></script>
+<!-- fullCalendar 2.2.5 -->
+<script src="{% static 'js/fullcalendar.min.js' %}"></script>
 
 
 

@@ -29,6 +29,8 @@ var toolOrderJs= {
         var strProcedure = e.options[e.selectedIndex].value;
         e = document.getElementById("listStations");
         var strStation = e.options[e.selectedIndex].value;
+        e = document.getElementById("valuePriority");
+        var valPriority = e.options[e.selectedIndex].value;
 
         var momentObj = moment($('#datepickerIn').val());
         var date_in_format = momentObj.format();
@@ -67,7 +69,8 @@ var toolOrderJs= {
                 "due_date" : due_date_format,
                 "date_out" : date_out_format,
                 "station" : strStation,
-                "cost" : document.getElementById("inputCost").value
+                "cost" : document.getElementById("inputCost").value,
+                "priority" : valPriority
             }
              // console.log(JSON.stringify(objectOrder));
              // alert("almacenando");
@@ -109,7 +112,12 @@ var toolOrderJs= {
         if(data.due_date!=null)
             $('#datepickerDue').datepicker('setDate', new Date(data.due_date));
         $('#inputCost').val(data.cost);
-
+        if(data.priority!=null){
+            $('#valuePriority').val(data.priority);
+        }else{
+            $('#valuePriority').val(3);
+        }
+        $('#valuePriority').selectpicker('refresh');
     },
     updateOrderInfo: function(data){
         $('#SaveModal').modal('hide');
@@ -119,9 +127,6 @@ var toolOrderJs= {
         $('#DeleteModal').modal('hide');
         $('#confirmModal').modal('show');
     },
-
-
-
 
 
     requestRest: function(urlRest) {
